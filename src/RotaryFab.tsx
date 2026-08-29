@@ -17,6 +17,7 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
   onOpenChange,
   placement = 'bottom-left',
   theme = 'luxury-watch',
+  animationMode = 'spring',
   customTheme,
   arcConfigs: customArcConfigs,
   mainButton,
@@ -179,7 +180,7 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
   return (
     <div
       ref={anchorRef}
-      className={`rf-container ${placementClass} ${isOpen ? 'rf-open' : ''} ${
+      className={`rf-container ${placementClass} rf-anim-${animationMode} ${isOpen ? 'rf-open' : ''} ${
         isDialMode ? 'rf-dial-mode' : ''
       } ${className}`}
       style={{
@@ -203,35 +204,41 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
         )}
 
         {/* Rotary Items distributed in Arcs */}
-        {tierGroups.map(({ config, items: tItems, tierIndex }) => {
-          const span = getPlacementAngleSpan(placement);
-          const startAngle = config.startAngleDeg !== undefined ? config.startAngleDeg : span.startDeg;
-          const endAngle = config.endAngleDeg !== undefined ? config.endAngleDeg : span.endDeg;
-          const count = tItems.length;
-          const angleStep = count > 1 ? (endAngle - startAngle) / (count - 1) : 0;
+        {(() => {
+          let globalItemCount = 0;
+          return tierGroups.map(({ config, items: tItems, tierIndex }) => {
+            const span = getPlacementAngleSpan(placement);
+            const startAngle = config.startAngleDeg !== undefined ? config.startAngleDeg : span.startDeg;
+            const endAngle = config.endAngleDeg !== undefined ? config.endAngleDeg : span.endDeg;
+            const count = tItems.length;
+            const angleStep = count > 1 ? (endAngle - startAngle) / (count - 1) : 0;
 
-          return tItems.map((item, i) => {
-            const angleDeg = count > 1 ? startAngle + i * angleStep : startAngle;
-            const { x, y } = polarToCartesian(config.radius, angleDeg);
+            return tItems.map((item, i) => {
+              const currentGlobal = globalItemCount++;
+              const angleDeg = count > 1 ? startAngle + i * angleStep : startAngle;
+              const { x, y } = polarToCartesian(config.radius, angleDeg);
 
-            return (
-              <RotaryItem
-                key={item.id}
-                item={item}
-                x={x}
-                y={y}
-                size={config.btnSize || 38}
-                iconSize={config.iconSize || 18}
-                tierIndex={tierIndex}
-                index={i}
-                placement={placement}
-                enableHaptics={enableHaptics}
-                onItemClick={handleItemClick}
-                renderCustom={renderItem}
-              />
-            );
+              return (
+                <RotaryItem
+                  key={item.id}
+                  item={item}
+                  x={x}
+                  y={y}
+                  size={config.btnSize || 38}
+                  iconSize={config.iconSize || 18}
+                  tierIndex={tierIndex}
+                  index={i}
+                  globalIndex={currentGlobal}
+                  angleDeg={angleDeg}
+                  placement={placement}
+                  enableHaptics={enableHaptics}
+                  onItemClick={handleItemClick}
+                  renderCustom={renderItem}
+                />
+              );
+            });
           });
-        })}
+        })()}
       </div>
 
       {/* Precision Rotary Dial / Arc Slider */}

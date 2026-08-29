@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, Icons } from 'react-rotary-fab';
+import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, AnimationMode, Icons } from 'react-rotary-fab';
 
 interface MediaPlayerDemoProps {
   placement: FabPlacement;
   theme: FabTheme;
+  animationMode?: AnimationMode;
+  showOrbitLines?: boolean;
   enableHaptics: boolean;
 }
 
 export const MediaPlayerDemo: React.FC<MediaPlayerDemoProps> = ({
   placement,
   theme,
+  animationMode = 'spring',
+  showOrbitLines = true,
   enableHaptics
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -150,6 +154,8 @@ export const MediaPlayerDemo: React.FC<MediaPlayerDemoProps> = ({
         items={items}
         placement={placement}
         theme={theme}
+        animationMode={animationMode}
+        showOrbitLines={showOrbitLines}
         style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
         dialMode={isDialOpen}

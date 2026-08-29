@@ -6,10 +6,14 @@ export interface AngleSpan {
   totalSpanDeg: number;
 }
 
+export interface DialAngleSpan {
+  zeroDeg: number;
+  maxDeg: number;
+  totalSpanDeg: number;
+}
+
 /**
- * Returns default angle span in degrees for a given placement.
- * 0 deg is positive X (right), 90 deg is negative Y (up on screen),
- * 180 deg is negative X (left), 270 deg is positive Y (down on screen).
+ * Returns angle span in degrees for the multi-tier rotary action wheel.
  */
 export function getPlacementAngleSpan(placement: FabPlacement = 'bottom-left'): AngleSpan {
   switch (placement) {
@@ -45,16 +49,38 @@ export function getPlacementAngleSpan(placement: FabPlacement = 'bottom-left'): 
 }
 
 /**
+ * Returns the exact 0% and 100% dial angles for the precision rotary arc slider.
+ * Progress flows naturally from 0% (zeroDeg) up to 100% (maxDeg).
+ */
+export function getDialAngleSpan(placement: FabPlacement = 'bottom-left'): DialAngleSpan {
+  switch (placement) {
+    case 'bottom-left':
+      // 0% at Right (0°), 100% at Top (90°)
+      return { zeroDeg: 0, maxDeg: 90, totalSpanDeg: 90 };
+    case 'bottom-right':
+      // 0% at Left (180°), 100% at Top (90°)
+      return { zeroDeg: 180, maxDeg: 90, totalSpanDeg: 90 };
+    case 'top-left':
+      // 0% at Right (360°/0°), 100% at Bottom (270°)
+      return { zeroDeg: 360, maxDeg: 270, totalSpanDeg: 90 };
+    case 'top-right':
+      // 0% at Left (180°), 100% at Bottom (270°)
+      return { zeroDeg: 180, maxDeg: 270, totalSpanDeg: 90 };
+    case 'bottom-center':
+      return { zeroDeg: 0, maxDeg: 180, totalSpanDeg: 180 };
+    case 'top-center':
+      return { zeroDeg: 360, maxDeg: 180, totalSpanDeg: 180 };
+    default:
+      return { zeroDeg: 0, maxDeg: 90, totalSpanDeg: 90 };
+  }
+}
+
+/**
  * Converts polar coordinates (radius, angle in degrees) to cartesian (x, y)
  * with screen coordinates (Y is inverted: positive Y goes down, negative Y goes up).
  */
 export function polarToCartesian(radius: number, angleDeg: number): { x: number; y: number } {
   const angleRad = (angleDeg * Math.PI) / 180;
-  // In screen space:
-  // angle 0° = right (+x, 0)
-  // angle 90° = up (0, -y)
-  // angle 180° = left (-x, 0)
-  // angle 270° = down (0, +y)
   let x = Math.round(radius * Math.cos(angleRad) * 1000) / 1000;
   let y = Math.round(-radius * Math.sin(angleRad) * 1000) / 1000;
   if (Object.is(x, -0)) x = 0;
@@ -73,13 +99,13 @@ export function describeArc(
   const start = polarToCartesian(radius, startAngleDeg);
   const end = polarToCartesian(radius, endAngleDeg);
 
-  // Determine large-arc-flag
   let diff = Math.abs(endAngleDeg - startAngleDeg);
   if (diff > 360) diff = 360;
   const largeArcFlag = diff <= 180 ? 0 : 1;
 
-  // Sweep flag: clockwise vs counter-clockwise in screen coordinates
-  // When angle decreases (e.g. 90 -> 0), it moves clockwise in Cartesian, which is sweep-flag 1 in SVG
+  // In screen coordinates:
+  // Decreasing angle (e.g. 90 -> 0 or 180 -> 90) moves clockwise (sweep-flag 1)
+  // Increasing angle (e.g. 0 -> 90 or 180 -> 270) moves counter-clockwise (sweep-flag 0)
   const sweepFlag = endAngleDeg < startAngleDeg ? 1 : 0;
 
   return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${end.x} ${end.y}`;
@@ -176,8 +202,6 @@ export function calculatePointerNormalized(
   }
   const angleDeg = (angleRad * 180) / Math.PI;
 
-  const span = getPlacementAngleSpan(placement);
-
   if (placement === 'bottom-left') {
     // 0 deg (right) is 0%, 90 deg (top) is 100%
     const clampedDeg = Math.max(0, Math.min(90, angleDeg));
@@ -193,25 +217,26 @@ export function calculatePointerNormalized(
   }
 
   if (placement === 'top-left') {
-    // 0 deg / 360 deg (right) is 0%, 270 deg (bottom) is 100%
+    // 360 deg / 0 deg (right) is 0%, 270 deg (bottom) is 100%
     let deg = angleDeg;
     if (deg < 270 && deg > 90) deg = 270;
     if (deg >= 270) {
       return (360 - deg) / 90;
     }
-    return 1;
+    return 0;
   }
 
   if (placement === 'top-right') {
     // 180 deg (left) is 0%, 270 deg (bottom) is 100%
     let deg = angleDeg;
-    if (deg < 180 || deg > 270) deg = Math.abs(deg - 180) < Math.abs(deg - 270) ? 180 : 270;
+    if (deg < 180) deg = 180;
+    if (deg > 270) deg = 270;
     return (deg - 180) / 90;
   }
 
-  // Generic span calculation for other placements
-  const diff = span.endDeg - span.startDeg;
-  let normalized = (angleDeg - span.startDeg) / diff;
+  const span = getDialAngleSpan(placement);
+  const diff = span.maxDeg - span.zeroDeg;
+  let normalized = (angleDeg - span.zeroDeg) / diff;
   return Math.max(0, Math.min(1, normalized));
 }
 
@@ -225,12 +250,12 @@ export function generateWatchDialTicks(
   placement: FabPlacement = 'bottom-left'
 ): DialTick[] {
   const ticks: DialTick[] = [];
-  const span = getPlacementAngleSpan(placement);
+  const span = getDialAngleSpan(placement);
 
   for (let i = 0; i <= tickCount; i++) {
     const percent = i / tickCount;
-    // Current tick angle
-    const angleDeg = span.startDeg + (span.endDeg - span.startDeg) * (1 - percent);
+    // Current tick angle from 0% (zeroDeg) to 100% (maxDeg)
+    const angleDeg = span.zeroDeg + percent * (span.maxDeg - span.zeroDeg);
     const isMajor = i % 5 === 0;
     const isActive = percent <= normalizedValue + 0.005;
 
@@ -265,11 +290,11 @@ export function generateCelestialDots(
   placement: FabPlacement = 'bottom-left'
 ): DialDot[] {
   const dots: DialDot[] = [];
-  const span = getPlacementAngleSpan(placement);
+  const span = getDialAngleSpan(placement);
 
   for (let i = 0; i <= dotCount; i++) {
     const percent = i / dotCount;
-    const angleDeg = span.startDeg + (span.endDeg - span.startDeg) * (1 - percent);
+    const angleDeg = span.zeroDeg + percent * (span.maxDeg - span.zeroDeg);
     const isActive = percent <= normalizedValue + 0.02;
     const isMajor = i % 3 === 0;
 

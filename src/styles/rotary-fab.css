@@ -221,7 +221,102 @@
 .rf-item-wrapper {
   position: absolute;
   pointer-events: auto;
-  transition: transform 0.4s var(--rf-transition-timing);
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px));
+}
+
+/* ==========================================================================
+   Animation Modes
+   ========================================================================== */
+
+/* 1. Spring Mode (Default fluid organic physics) */
+.rf-anim-spring .rf-item-wrapper {
+  opacity: 0;
+  transform: translate(0px, 0px) scale(0.2);
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  transition-delay: calc(var(--rf-index, 0) * 22ms);
+}
+.rf-anim-spring.rf-open:not(.rf-dial-mode) .rf-item-wrapper {
+  opacity: 1;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px)) scale(1);
+}
+
+/* 2. Stagger Ripple Mode */
+.rf-anim-stagger .rf-item-wrapper {
+  opacity: 0;
+  transform: translate(0px, 0px) scale(0.3);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  transition-delay: calc(var(--rf-index, 0) * 38ms);
+}
+.rf-anim-stagger.rf-open:not(.rf-dial-mode) .rf-item-wrapper {
+  opacity: 1;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px)) scale(1);
+}
+
+/* 3. Spiral Blossom Mode */
+.rf-anim-spiral .rf-item-wrapper {
+  opacity: 0;
+  transform: translate(0px, 0px) rotate(-180deg) scale(0.1);
+  transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.35s ease;
+  transition-delay: calc(var(--rf-index, 0) * 26ms);
+}
+.rf-anim-spiral.rf-open:not(.rf-dial-mode) .rf-item-wrapper {
+  opacity: 1;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px)) rotate(0deg) scale(1);
+}
+
+/* 4. Fan Radial Mode */
+.rf-anim-fan .rf-item-wrapper {
+  opacity: 0;
+  transform: translate(0px, 0px) rotate(calc(var(--rf-angle, 0deg) * 0.5)) scale(0.2);
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+  transition-delay: calc(var(--rf-index, 0) * 28ms);
+}
+.rf-anim-fan.rf-open:not(.rf-dial-mode) .rf-item-wrapper {
+  opacity: 1;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px)) rotate(0deg) scale(1);
+}
+
+/* 5. Scale In-Place Mode */
+.rf-anim-scale .rf-item-wrapper {
+  opacity: 0;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px)) scale(0);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  transition-delay: calc(var(--rf-index, 0) * 18ms);
+}
+.rf-anim-scale.rf-open:not(.rf-dial-mode) .rf-item-wrapper {
+  opacity: 1;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px)) scale(1);
+}
+
+/* 6. Elastic Rubber-Band Mode */
+.rf-anim-elastic .rf-item-wrapper {
+  opacity: 0;
+  transform: translate(0px, 0px) scale(0.1);
+  transition: transform 0.55s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease;
+  transition-delay: calc(var(--rf-index, 0) * 20ms);
+}
+.rf-anim-elastic.rf-open:not(.rf-dial-mode) .rf-item-wrapper {
+  opacity: 1;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px)) scale(1);
+}
+
+/* 7. Fade Mode */
+.rf-anim-fade .rf-item-wrapper {
+  opacity: 0;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px));
+  transition: opacity 0.25s ease;
+}
+.rf-anim-fade.rf-open:not(.rf-dial-mode) .rf-item-wrapper {
+  opacity: 1;
+}
+
+/* 8. None (Instant) */
+.rf-anim-none .rf-item-wrapper {
+  opacity: 0;
+  transform: translate(var(--rf-tx, 0px), var(--rf-ty, 0px));
+}
+.rf-anim-none.rf-open:not(.rf-dial-mode) .rf-item-wrapper {
+  opacity: 1;
 }
 
 .rf-item {

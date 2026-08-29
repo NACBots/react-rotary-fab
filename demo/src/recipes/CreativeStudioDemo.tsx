@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, Icons } from 'react-rotary-fab';
+import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, AnimationMode, Icons } from 'react-rotary-fab';
 
 interface CreativeStudioDemoProps {
   placement: FabPlacement;
   theme: FabTheme;
+  animationMode?: AnimationMode;
+  showOrbitLines?: boolean;
   enableHaptics: boolean;
 }
 
 export const CreativeStudioDemo: React.FC<CreativeStudioDemoProps> = ({
   placement,
   theme,
+  animationMode = 'spring',
+  showOrbitLines = true,
   enableHaptics
 }) => {
   const [activeTool, setActiveTool] = useState<string>('brush');
@@ -79,6 +83,8 @@ export const CreativeStudioDemo: React.FC<CreativeStudioDemoProps> = ({
         items={items}
         placement={placement}
         theme={theme}
+        animationMode={animationMode}
+        showOrbitLines={showOrbitLines}
         style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
         dialMode={isDialMode}

@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { FabPlacement, FabTheme } from 'react-rotary-fab';
+import { FabPlacement, FabTheme, AnimationMode } from 'react-rotary-fab';
 import { MediaPlayerDemo } from './recipes/MediaPlayerDemo';
 import { CreativeStudioDemo } from './recipes/CreativeStudioDemo';
 import { SmartHomeDialDemo } from './recipes/SmartHomeDialDemo';
 import { MinimalCornerDemo } from './recipes/MinimalCornerDemo';
-import { Copy, Check, Github, Terminal, Sparkles, Layers, Sliders, Smartphone, ShieldCheck } from 'lucide-react';
+import { Copy, Check, Github, Terminal, Sparkles, Layers, Sliders, Smartphone, ShieldCheck, Orbit, Play } from 'lucide-react';
 
 export default function App() {
   const [placement, setPlacement] = useState<FabPlacement>('bottom-left');
   const [theme, setTheme] = useState<FabTheme>('luxury-watch');
+  const [animationMode, setAnimationMode] = useState<AnimationMode>('spring');
+  const [showOrbitLines, setShowOrbitLines] = useState<boolean>(true);
   const [enableHaptics, setEnableHaptics] = useState(true);
   const [activeTab, setActiveTab] = useState<'media' | 'studio' | 'climate' | 'minimal'>('media');
   const [copied, setCopied] = useState(false);
@@ -32,7 +34,7 @@ export default function MyComponent() {
   const items = [
     {
       id: 'vol',
-      title: 'Volume Dial',
+      title: 'Precision Volume Dial',
       icon: <Icons.Volume />,
       onClick: () => setIsDialMode(true)
     },
@@ -62,6 +64,8 @@ export default function MyComponent() {
       items={items}
       placement="${placement}"
       theme="${theme}"
+      animationMode="${animationMode}"
+      showOrbitLines={${showOrbitLines}}
       enableHaptics={${enableHaptics}}
       dialMode={isDialMode}
       onDialModeChange={setIsDialMode}
@@ -171,14 +175,14 @@ export default function MyComponent() {
             </div>
           </div>
 
-          {/* Placement & Theme Controls */}
+          {/* Placement & Theme & Animation Controls */}
           <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 backdrop-blur-md space-y-5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
               <Sliders size={14} className="text-cyan-400" />
               <span>Interactive Controls</span>
             </h3>
 
-            {/* Placement */}
+            {/* Corner Placement */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-slate-300">Corner Placement</label>
               <div className="grid grid-cols-2 gap-2">
@@ -188,11 +192,34 @@ export default function MyComponent() {
                     onClick={() => setPlacement(pos)}
                     className={`px-2.5 py-1.5 text-xs font-mono rounded-lg transition border ${
                       placement === pos
-                        ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300'
+                        ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300 font-semibold'
                         : 'bg-slate-800/30 border-slate-800 text-slate-400 hover:text-slate-200'
                     }`}
                   >
                     {pos}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Animation Modes */}
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
+                <Play size={12} className="text-cyan-400" />
+                <span>Animation Mode</span>
+              </label>
+              <div className="grid grid-cols-3 gap-1.5">
+                {(['spring', 'stagger', 'spiral', 'fan', 'scale', 'elastic', 'fade', 'none'] as AnimationMode[]).map(mode => (
+                  <button
+                    key={mode}
+                    onClick={() => setAnimationMode(mode)}
+                    className={`px-2 py-1.5 text-[11px] font-mono capitalize rounded-lg transition border ${
+                      animationMode === mode
+                        ? 'bg-cyan-500/20 border-cyan-500/60 text-cyan-300 font-semibold'
+                        : 'bg-slate-800/30 border-slate-800 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {mode}
                   </button>
                 ))}
               </div>
@@ -224,24 +251,47 @@ export default function MyComponent() {
               </div>
             </div>
 
-            {/* Haptics */}
-            <div className="flex items-center justify-between pt-2 border-t border-slate-800/60">
-              <div className="flex items-center gap-2">
-                <Smartphone size={15} className="text-slate-400" />
-                <span className="text-xs text-slate-300 font-medium">Tactile Vibration Haptics</span>
-              </div>
-              <button
-                onClick={() => setEnableHaptics(h => !h)}
-                className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
-                  enableHaptics ? 'bg-cyan-500' : 'bg-slate-700'
-                }`}
-              >
-                <span
-                  className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition ${
-                    enableHaptics ? 'translate-x-4.5' : 'translate-x-1'
+            {/* Toggles: Orbit Lines & Haptics */}
+            <div className="space-y-3 pt-2 border-t border-slate-800/60">
+              {/* Show Orbit Lines Toggle */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Orbit size={15} className="text-slate-400" />
+                  <span className="text-xs text-slate-300 font-medium">Show Orbit Outline</span>
+                </div>
+                <button
+                  onClick={() => setShowOrbitLines(o => !o)}
+                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
+                    showOrbitLines ? 'bg-cyan-500' : 'bg-slate-700'
                   }`}
-                />
-              </button>
+                >
+                  <span
+                    className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition ${
+                      showOrbitLines ? 'translate-x-4.5' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* Haptics Toggle */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Smartphone size={15} className="text-slate-400" />
+                  <span className="text-xs text-slate-300 font-medium">Tactile Vibration Haptics</span>
+                </div>
+                <button
+                  onClick={() => setEnableHaptics(h => !h)}
+                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
+                    enableHaptics ? 'bg-cyan-500' : 'bg-slate-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition ${
+                      enableHaptics ? 'translate-x-4.5' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -249,10 +299,42 @@ export default function MyComponent() {
         {/* Right: Live Interactive Sandbox & Code Snippet */}
         <div className="lg:col-span-8 space-y-6">
           {/* Active Canvas Showcase */}
-          {activeTab === 'media' && <MediaPlayerDemo placement={placement} theme={theme} enableHaptics={enableHaptics} />}
-          {activeTab === 'studio' && <CreativeStudioDemo placement={placement} theme={theme} enableHaptics={enableHaptics} />}
-          {activeTab === 'climate' && <SmartHomeDialDemo placement={placement} theme={theme} enableHaptics={enableHaptics} />}
-          {activeTab === 'minimal' && <MinimalCornerDemo placement={placement} theme={theme} enableHaptics={enableHaptics} />}
+          {activeTab === 'media' && (
+            <MediaPlayerDemo
+              placement={placement}
+              theme={theme}
+              animationMode={animationMode}
+              showOrbitLines={showOrbitLines}
+              enableHaptics={enableHaptics}
+            />
+          )}
+          {activeTab === 'studio' && (
+            <CreativeStudioDemo
+              placement={placement}
+              theme={theme}
+              animationMode={animationMode}
+              showOrbitLines={showOrbitLines}
+              enableHaptics={enableHaptics}
+            />
+          )}
+          {activeTab === 'climate' && (
+            <SmartHomeDialDemo
+              placement={placement}
+              theme={theme}
+              animationMode={animationMode}
+              showOrbitLines={showOrbitLines}
+              enableHaptics={enableHaptics}
+            />
+          )}
+          {activeTab === 'minimal' && (
+            <MinimalCornerDemo
+              placement={placement}
+              theme={theme}
+              animationMode={animationMode}
+              showOrbitLines={showOrbitLines}
+              enableHaptics={enableHaptics}
+            />
+          )}
 
           {/* Live Generated Code Snippet */}
           <div className="bg-[#090b10] border border-slate-800/90 rounded-2xl overflow-hidden shadow-2xl">
@@ -286,7 +368,7 @@ export default function MyComponent() {
           </div>
           <h3 className="font-bold text-white text-base">Concentric Multi-Tier Arcs</h3>
           <p className="text-slate-400 text-xs leading-relaxed">
-            Organize 4, 10, or 20+ actions across nested orbital concentric tiers with balanced trigonometry and staggered entrance animations.
+            Organize actions across concentric tiers with 8 animation modes: Spring, Stagger, Spiral, Fan, Scale, Elastic, Fade, or None.
           </p>
         </div>
 
@@ -296,7 +378,7 @@ export default function MyComponent() {
           </div>
           <h3 className="font-bold text-white text-base">Watchmaker Precision Dial</h3>
           <p className="text-slate-400 text-xs leading-relaxed">
-            Integrated and standalone rotary arc scrubber with celestial micro-dots, precision tick marks, luminous jewel thumb knob, and keyboard/wheel support.
+            Synchronized progress direction, celestial micro-dots, precision tick marks, luminous jewel thumb knob, and keyboard/wheel support.
           </p>
         </div>
 
@@ -306,7 +388,7 @@ export default function MyComponent() {
           </div>
           <h3 className="font-bold text-white text-base">Zero Heavy Dependencies</h3>
           <p className="text-slate-400 text-xs leading-relaxed">
-            Pure React with zero heavy UI libraries. Includes built-in accessible tooltips, safe Web Vibration haptics, and complete TypeScript definitions.
+            Pure React with zero heavy UI libraries. Includes toggleable orbit outlines, safe Web Vibration haptics, and complete TypeScript definitions.
           </p>
         </div>
       </section>

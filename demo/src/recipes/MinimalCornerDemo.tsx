@@ -1,15 +1,18 @@
-import React from 'react';
-import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, Icons } from 'react-rotary-fab';
+import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, AnimationMode, Icons } from 'react-rotary-fab';
 
 interface MinimalCornerDemoProps {
   placement: FabPlacement;
   theme: FabTheme;
+  animationMode?: AnimationMode;
+  showOrbitLines?: boolean;
   enableHaptics: boolean;
 }
 
 export const MinimalCornerDemo: React.FC<MinimalCornerDemoProps> = ({
   placement,
   theme,
+  animationMode = 'spring',
+  showOrbitLines = true,
   enableHaptics
 }) => {
   const items: RotaryFabItem[] = [
@@ -36,6 +39,8 @@ export const MinimalCornerDemo: React.FC<MinimalCornerDemoProps> = ({
         items={items}
         placement={placement}
         theme={theme}
+        animationMode={animationMode}
+        showOrbitLines={showOrbitLines}
         style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
         arcConfigs={[{ maxCount: 4, radius: 92, btnSize: 40, iconSize: 18 }]}

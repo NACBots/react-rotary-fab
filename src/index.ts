@@ -33,6 +33,7 @@ export { THEMES, getThemeStyle } from './utils/themes';
 export type {
   FabPlacement,
   FabTheme,
+  AnimationMode,
   HapticType,
   RotaryFabItem,
   ArcTierConfig,

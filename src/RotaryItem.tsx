@@ -10,6 +10,8 @@ export interface RotaryItemProps {
   iconSize: number;
   tierIndex: number;
   index: number;
+  globalIndex?: number;
+  angleDeg?: number;
   placement?: FabPlacement;
   enableHaptics?: boolean;
   onItemClick?: (item: RotaryFabItem, event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -24,6 +26,8 @@ export const RotaryItem: React.FC<RotaryItemProps> = ({
   iconSize,
   tierIndex,
   index,
+  globalIndex,
+  angleDeg,
   placement = 'bottom-left',
   enableHaptics = true,
   onItemClick,
@@ -70,11 +74,14 @@ export const RotaryItem: React.FC<RotaryItemProps> = ({
         position: 'absolute',
         top: 0,
         left: 0,
-        transform: `translate(${x}px, ${y}px)`,
+        '--rf-tx': `${x}px`,
+        '--rf-ty': `${y}px`,
+        '--rf-index': globalIndex ?? index,
+        '--rf-angle': `${angleDeg ?? 0}deg`,
         marginTop: `-${size / 2}px`,
         marginLeft: `-${size / 2}px`,
         zIndex: 20 + tierIndex * 5 + index
-      }}
+      } as React.CSSProperties}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
       onFocus={() => setShowTooltip(true)}

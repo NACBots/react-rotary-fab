@@ -3,6 +3,7 @@ import {
   polarToCartesian,
   describeArc,
   getPlacementAngleSpan,
+  getDialAngleSpan,
   getSvgViewBox,
   calculatePointerNormalized,
   generateWatchDialTicks,
@@ -37,6 +38,13 @@ describe('Geometry Utils', () => {
     expect(getPlacementAngleSpan('bottom-right')).toEqual({ startDeg: 90, endDeg: 180, totalSpanDeg: 90 });
     expect(getPlacementAngleSpan('top-left')).toEqual({ startDeg: 270, endDeg: 360, totalSpanDeg: 90 });
     expect(getPlacementAngleSpan('top-right')).toEqual({ startDeg: 270, endDeg: 180, totalSpanDeg: 90 });
+  });
+
+  it('returns synchronized dial angle spans with 0% to 100% direction', () => {
+    expect(getDialAngleSpan('bottom-left')).toEqual({ zeroDeg: 0, maxDeg: 90, totalSpanDeg: 90 });
+    expect(getDialAngleSpan('bottom-right')).toEqual({ zeroDeg: 180, maxDeg: 90, totalSpanDeg: 90 });
+    expect(getDialAngleSpan('top-left')).toEqual({ zeroDeg: 360, maxDeg: 270, totalSpanDeg: 90 });
+    expect(getDialAngleSpan('top-right')).toEqual({ zeroDeg: 180, maxDeg: 270, totalSpanDeg: 90 });
   });
 
   it('generates valid SVG arc path string', () => {

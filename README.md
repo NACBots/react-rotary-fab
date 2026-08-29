@@ -150,6 +150,7 @@ export function BrightnessControl() {
 | `items` | `RotaryFabItem[]` | `[]` | Array of action menu items distributed across concentric arcs. |
 | `placement` | `FabPlacement` | `'bottom-left'` | Corner or edge placement (`'bottom-left'`, `'bottom-right'`, `'top-left'`, `'top-right'`, `'bottom-center'`, `'top-center'`, `'center'`). |
 | `theme` | `FabTheme` | `'luxury-watch'` | Preset theme (`'luxury-watch'`, `'glassmorphic'`, `'cyberpunk'`, `'minimal-light'`, `'neon'`). |
+| `animationMode` | `AnimationMode` | `'spring'` | Animation mode: `'spring'`, `'stagger'`, `'spiral'`, `'fan'`, `'scale'`, `'elastic'`, `'fade'`, `'none'`. |
 | `customTheme` | `Record<string, string>` | `undefined` | Custom CSS variable overrides. |
 | `open` | `boolean` | `undefined` | Controlled open/expanded state. |
 | `defaultOpen` | `boolean` | `false` | Uncontrolled default open state. |
@@ -168,7 +169,7 @@ export function BrightnessControl() {
 | `closeOnItemClick` | `boolean` | `true` | Auto-close menu when an item is clicked. |
 | `closeOnOutsideClick`| `boolean` | `true` | Auto-close when clicking outside. |
 | `enableHaptics` | `boolean` | `true` | Enable safe tactile vibration on supported devices. |
-| `showOrbitLines` | `boolean` | `true` | Show subtle concentric dashed SVG orbit lines. |
+| `showOrbitLines` | `boolean` | `true` | Enable or disable concentric dashed SVG orbit guidelines. |
 | `showCornerBackdrop`| `boolean` | `true` | Show ambient radial gradient corner backdrop. |
 | `renderItem` | `(item, index, tier) => ReactNode` | `undefined` | Custom item renderer function. |
 

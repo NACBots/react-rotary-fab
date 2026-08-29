@@ -27,6 +27,19 @@ export type FabTheme =
   | (string & {});
 
 /**
+ * Animation entrance/exit mode for the rotary items.
+ */
+export type AnimationMode =
+  | 'spring'
+  | 'stagger'
+  | 'spiral'
+  | 'fan'
+  | 'scale'
+  | 'fade'
+  | 'elastic'
+  | 'none';
+
+/**
  * Safe tactile vibration haptic feedback patterns.
  */
 export type HapticType =
@@ -160,6 +173,8 @@ export interface RotaryDialProps {
   dotCount?: number;
   /** Whether to render the precision needle on the thumb knob (default: true) */
   showNeedle?: boolean;
+  /** Whether to render background track line (default: true) */
+  showTrack?: boolean;
   /** Whether to render subtle concentric bezel guidelines (default: true) */
   showBezel?: boolean;
   /** Whether to enable glowing drop-shadow filters (default: true) */
@@ -192,6 +207,8 @@ export interface RotaryFabProps {
   placement?: FabPlacement;
   /** Preset theme name (default: 'luxury-watch') */
   theme?: FabTheme;
+  /** Animation entrance & exit mode (default: 'spring') */
+  animationMode?: AnimationMode;
   /** Custom theme CSS variable overrides */
   customTheme?: Record<string, string>;
   /** Concentric arc configurations */

@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, Icons } from 'react-rotary-fab';
+import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, AnimationMode, Icons } from 'react-rotary-fab';
 
 interface SmartHomeDialDemoProps {
   placement: FabPlacement;
   theme: FabTheme;
+  animationMode?: AnimationMode;
+  showOrbitLines?: boolean;
   enableHaptics: boolean;
 }
 
 export const SmartHomeDialDemo: React.FC<SmartHomeDialDemoProps> = ({
   placement,
   theme,
+  animationMode = 'spring',
+  showOrbitLines = true,
   enableHaptics
 }) => {
   const [temperature, setTemperature] = useState<number>(22);
@@ -59,6 +63,8 @@ export const SmartHomeDialDemo: React.FC<SmartHomeDialDemoProps> = ({
         items={items}
         placement={placement}
         theme={theme}
+        animationMode={animationMode}
+        showOrbitLines={showOrbitLines}
         style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
         dialMode={isDialMode}

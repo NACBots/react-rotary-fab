@@ -62,4 +62,22 @@ describe('RotaryFab Component', () => {
     const root = container.firstChild as HTMLElement;
     expect(root.className).toContain('rf-placement-top-right');
   });
+
+  it('applies animationMode class correctly', () => {
+    const { container } = render(
+      <RotaryFab items={mockItems} animationMode="spiral" />
+    );
+    const root = container.firstChild as HTMLElement;
+    expect(root.className).toContain('rf-anim-spiral');
+  });
+
+  it('can toggle orbit lines rendering', () => {
+    const { container, rerender } = render(
+      <RotaryFab items={mockItems} defaultOpen={true} showOrbitLines={true} />
+    );
+    expect(container.querySelector('.rf-orbit-tracks-svg')).toBeInTheDocument();
+
+    rerender(<RotaryFab items={mockItems} defaultOpen={true} showOrbitLines={false} />);
+    expect(container.querySelector('.rf-orbit-tracks-svg')).not.toBeInTheDocument();
+  });
 });

@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { RotaryDialProps } from './types';
 import {
   describeArc,
-  getPlacementAngleSpan,
+  getDialAngleSpan,
   polarToCartesian,
   getSvgViewBox,
   generateWatchDialTicks,
@@ -22,6 +22,7 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
   placement = 'bottom-left',
   label,
   unit = '% VOL',
+  showTrack = true,
   showTicks = true,
   tickCount = 20,
   showMicroDots = true,
@@ -75,18 +76,18 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
     onChangeEnd
   });
 
-  const span = getPlacementAngleSpan(placement);
+  const span = getDialAngleSpan(placement);
   const normalizedValue = Math.max(0, Math.min(1, (currentValue - min) / (max - min || 1)));
 
   // SVG dimensions
   const svgInfo = getSvgViewBox(radius, 24, placement);
 
-  // Math for stroke dash offset
+  // Math for stroke dash offset (drawn from zeroDeg to maxDeg)
   const arcLength = (Math.abs(span.totalSpanDeg) * Math.PI * radius) / 180;
   const strokeOffset = arcLength * (1 - normalizedValue);
 
-  // Thumb position and needle angle
-  const currentAngleDeg = span.startDeg + (span.endDeg - span.startDeg) * (1 - normalizedValue);
+  // Thumb position and needle angle (from 0% to 100%)
+  const currentAngleDeg = span.zeroDeg + normalizedValue * (span.maxDeg - span.zeroDeg);
   const thumbPos = polarToCartesian(radius, currentAngleDeg);
   const needleP1 = polarToCartesian(radius - 10, currentAngleDeg);
   const needleP2 = polarToCartesian(radius + 10, currentAngleDeg);
@@ -170,7 +171,7 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         {/* Inner Dotted Celestial Orbit Guideline */}
         {showMicroDots && (
           <path
-            d={describeArc(innerDotRadius, span.startDeg, span.endDeg)}
+            d={describeArc(innerDotRadius, span.zeroDeg, span.maxDeg)}
             fill="none"
             stroke="var(--rf-track, rgba(255, 255, 255, 0.12))"
             strokeWidth="0.8"
@@ -200,7 +201,7 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         {/* Subtle Outer Bezel Guideline */}
         {showBezel && (
           <path
-            d={describeArc(radius + 8, span.startDeg, span.endDeg)}
+            d={describeArc(radius + 8, span.zeroDeg, span.maxDeg)}
             fill="none"
             stroke="var(--rf-track, rgba(255, 255, 255, 0.08))"
             strokeWidth="1"
@@ -210,7 +211,7 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         {/* Subtle Inner Bezel Guideline */}
         {showBezel && (
           <path
-            d={describeArc(radius - 8, span.startDeg, span.endDeg)}
+            d={describeArc(radius - 8, span.zeroDeg, span.maxDeg)}
             fill="none"
             stroke="var(--rf-track, rgba(255, 255, 255, 0.08))"
             strokeWidth="1"
@@ -218,18 +219,20 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         )}
 
         {/* Background Track Arc */}
-        <path
-          className="rf-dial-track"
-          d={describeArc(radius, span.startDeg, span.endDeg)}
-          fill="none"
-          stroke="var(--rf-track, rgba(255, 255, 255, 0.14))"
-          strokeWidth="1.5"
-        />
+        {showTrack && (
+          <path
+            className="rf-dial-track"
+            d={describeArc(radius, span.zeroDeg, span.maxDeg)}
+            fill="none"
+            stroke="var(--rf-track, rgba(255, 255, 255, 0.14))"
+            strokeWidth="1.5"
+          />
+        )}
 
         {/* Active Illuminated Fill Arc */}
         <path
           className="rf-dial-fill"
-          d={describeArc(radius, span.startDeg, span.endDeg)}
+          d={describeArc(radius, span.zeroDeg, span.maxDeg)}
           fill="none"
           stroke="var(--rf-fill, #ffffff)"
           strokeWidth="2"
