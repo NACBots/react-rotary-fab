@@ -30,7 +30,7 @@ export const CreativeStudioDemo: React.FC<CreativeStudioDemoProps> = ({
     {
       id: 'brush',
       title: 'Brush Tool',
-      icon: <Icons.Palette size={18} />,
+      icon: <Icons.Brush size={18} />,
       active: activeTool === 'brush',
       onClick: () => setActiveTool('brush')
     },

@@ -17,10 +17,10 @@ export const MinimalCornerDemo: React.FC<MinimalCornerDemoProps> = ({
   enableHaptics
 }) => {
   const items: RotaryFabItem[] = [
-    { id: '1', title: 'Action 1', icon: <Icons.Zap size={18} /> },
-    { id: '2', title: 'Action 2', icon: <Icons.Palette size={18} /> },
-    { id: '3', title: 'Action 3', icon: <Icons.Layers size={18} /> },
-    { id: '4', title: 'Action 4', icon: <Icons.Settings size={18} /> }
+    { id: '1', title: 'Speed Turbo', icon: <Icons.Zap size={18} /> },
+    { id: '2', title: 'Brush Tool', icon: <Icons.Brush size={18} /> },
+    { id: '3', title: 'Layers Panel', icon: <Icons.Layers size={18} /> },
+    { id: '4', title: 'Settings', icon: <Icons.Settings size={18} /> }
   ];
 
   return (
