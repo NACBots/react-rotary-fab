@@ -114,7 +114,7 @@ export default function MyComponent() {
             </button>
 
             <a
-              href="https://github.com/your-username/react-rotary-fab"
+              href="https://github.com/nikhileashy/react-rotary-fab"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition shadow-sm"

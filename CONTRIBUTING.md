@@ -6,7 +6,7 @@ Thank you for your interest in contributing to `react-rotary-fab`! We welcome bu
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/react-rotary-fab.git
+   git clone https://github.com/nikhileashy/react-rotary-fab.git
    cd react-rotary-fab
    ```
 

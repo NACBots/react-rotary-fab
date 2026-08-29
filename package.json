@@ -2,7 +2,7 @@
   "name": "react-rotary-fab",
   "version": "1.0.0",
   "description": "A luxury watchmaker-inspired, highly customizable concentric rotary Floating Action Button (FAB) and precision arc dial for React.",
-  "author": "Nikhil <nikhil@example.com>",
+  "author": "nikhileashy <nikhileashy9@gmail.com>",
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -43,12 +43,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/react-rotary-fab.git"
+    "url": "https://github.com/nikhileashy/react-rotary-fab.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/react-rotary-fab/issues"
+    "url": "https://github.com/nikhileashy/react-rotary-fab/issues"
   },
-  "homepage": "https://github.com/your-username/react-rotary-fab#readme",
+  "homepage": "https://github.com/nikhileashy/react-rotary-fab#readme",
   "scripts": {
     "dev": "npm --prefix demo run dev",
     "build": "tsup",

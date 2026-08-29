@@ -1,7 +1,7 @@
 # react-rotary-fab ⏱✨
 
 [![npm version](https://img.shields.io/npm/v/react-rotary-fab.svg?color=38bdf8)](https://www.npmjs.com/package/react-rotary-fab)
-[![license](https://img.shields.io/npm/l/react-rotary-fab.svg?color=10b981)](https://github.com/your-username/react-rotary-fab/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/react-rotary-fab.svg?color=10b981)](https://github.com/nikhileashy/react-rotary-fab/blob/main/LICENSE)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/react-rotary-fab?color=8b5cf6)](https://bundlephobia.com/package/react-rotary-fab)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
