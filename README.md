@@ -283,6 +283,12 @@ Contributions are welcome! Please check out [CONTRIBUTING.md](CONTRIBUTING.md) f
 
 ---
 
+## ✨ Credits & Acknowledgements
+
+Special thanks to [**@neehanazer**](https://github.com/neehanazer) for the luxury watchmaker design and concept contribution that inspired this component.
+
+---
+
 ## 📄 License
 
 MIT © [Nikhil](LICENSE)
