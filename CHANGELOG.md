@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1] - 2026-08-29
+
+### Added & Improved
+- 🎨 Added 8 configurable animation physics modes (`spring`, `stagger`, `spiral`, `fan`, `scale`, `elastic`, `fade`, `none`).
+- 🪐 Added concentric orbit outlines toggle (`showOrbitLines`).
+- 🔄 Fixed clockwise/counter-clockwise progress sweep synchronization across all 4 corner quadrants for `RotaryDial`.
+- 📷 Added `Camera` and `CameraOff` icon exports in `Icons`.
+- 🌐 Updated official repository, documentation, and live demo website links (`https://rotary-fab.nacbots.com`).
+- 👥 Added Contributors recognition for Nikhil Eashy and Neeha Nazer.
+
 ## [1.0.0] - 2026-08-29
 
 ### Added
