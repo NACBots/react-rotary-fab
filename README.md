@@ -14,11 +14,15 @@
 
 ---
 
-## 🎬 Video Preview
+## 🎬 Preview
 
-<div align="center">
-  <video src="assets/demo.mp4" controls width="100%" style="max-height: 480px; border-radius: 12px;"></video>
-</div>
+<p align="center">
+  <img src="assets/demo.gif" alt="react-rotary-fab interactive demo" width="100%" style="border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.6);" />
+</p>
+
+<p align="center">
+  <a href="https://rotary-fab.nacbots.com"><b>⚡ Explore the Live Interactive Studio Demo &rarr;</b></a>
+</p>
 
 ---
 
