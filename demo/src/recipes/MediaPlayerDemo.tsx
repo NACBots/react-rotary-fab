@@ -16,136 +16,107 @@ export const MediaPlayerDemo: React.FC<MediaPlayerDemoProps> = ({
   showOrbitLines = true,
   enableHaptics
 }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(70);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [volume, setVolume] = useState(72);
   const [isMuted, setIsMuted] = useState(false);
   const [videoActive, setVideoActive] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHold, setIsHold] = useState(false);
-  const [statusMsg, setStatusMsg] = useState<string>('Ready');
   const [isDialOpen, setIsDialOpen] = useState(false);
 
   const items: RotaryFabItem[] = [
-    // Tier 0: Core Quick Controls
     {
       id: 'volume',
       title: 'Precision Volume Dial',
       icon: isMuted || volume === 0 ? <Icons.VolumeMute size={18} /> : <Icons.Volume size={18} />,
-      onClick: () => {
-        setIsDialOpen(true);
-        setStatusMsg('Adjusting Volume Dial');
-      }
+      onClick: () => setIsDialOpen(true)
     },
     {
       id: 'play',
-      title: isPlaying ? 'Pause Video' : 'Play Video',
+      title: isPlaying ? 'Pause' : 'Play',
       icon: isPlaying ? <Icons.Pause size={18} /> : <Icons.Play size={18} />,
       active: isPlaying,
-      onClick: () => {
-        setIsPlaying(p => !p);
-        setStatusMsg(!isPlaying ? 'Playing Video' : 'Paused Video');
-      }
+      onClick: () => setIsPlaying(p => !p)
     },
     {
       id: 'mic',
-      title: isMuted ? 'Unmute Microphone' : 'Mute Microphone',
+      title: isMuted ? 'Unmute Mic' : 'Mute Mic',
       icon: isMuted ? <Icons.MicOff size={18} /> : <Icons.MicOn size={18} />,
       danger: isMuted,
       active: isMuted,
-      onClick: () => {
-        setIsMuted(m => !m);
-        setStatusMsg(isMuted ? 'Microphone Active' : 'Microphone Muted');
-      }
+      onClick: () => setIsMuted(m => !m)
     },
     {
-      id: 'video',
-      title: videoActive ? 'Turn Off Camera' : 'Turn On Camera',
+      id: 'camera',
+      title: videoActive ? 'Disable Video' : 'Enable Video',
       icon: videoActive ? <Icons.VideoOn size={18} /> : <Icons.VideoOff size={18} />,
-      danger: !videoActive,
-      active: !videoActive,
-      onClick: () => {
-        setVideoActive(v => !v);
-        setStatusMsg(videoActive ? 'Camera Off' : 'Camera On');
-      }
-    },
-
-    // Tier 1: Extended Player Controls
-    {
-      id: 'subtitle',
-      title: 'Subtitles & Captions',
-      icon: <Icons.Subtitle size={17} />,
-      onClick: () => setStatusMsg('Subtitles dialog opened')
+      onClick: () => setVideoActive(v => !v)
     },
     {
       id: 'seek',
-      title: 'Seek Time Position',
-      icon: <Icons.Seek size={17} />,
-      onClick: () => setStatusMsg('Seek position scrubber opened')
+      title: 'Seek Position',
+      icon: <Icons.Seek size={17} />
     },
     {
       id: 'hold',
-      title: isHold ? 'Release Hold' : 'Hold Sync Position',
+      title: isHold ? 'Release Hold' : 'Hold Sync',
       icon: <Icons.Hold size={17} />,
       active: isHold,
-      onClick: () => {
-        setIsHold(h => !h);
-        setStatusMsg(isHold ? 'Sync released' : 'Video sync held');
-      }
+      onClick: () => setIsHold(h => !h)
     },
     {
       id: 'layout',
-      title: 'Toggle Theater / Floating View',
-      icon: <Icons.Layout size={17} />,
-      onClick: () => setStatusMsg('Switched player layout mode')
+      title: 'Theater Mode',
+      icon: <Icons.Layout size={17} />
     },
     {
       id: 'fullscreen',
-      title: isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen',
+      title: isFullscreen ? 'Exit Fullscreen' : 'Fullscreen',
       icon: isFullscreen ? <Icons.FullscreenExit size={17} /> : <Icons.Fullscreen size={17} />,
       active: isFullscreen,
-      onClick: () => {
-        setIsFullscreen(f => !f);
-        setStatusMsg(isFullscreen ? 'Exited fullscreen' : 'Entered fullscreen');
-      }
+      onClick: () => setIsFullscreen(f => !f)
     },
     {
       id: 'settings',
-      title: 'Audio / Video Settings',
+      title: 'Settings',
       icon: <Icons.Settings size={17} />,
-      hasBadge: true,
-      onClick: () => setStatusMsg('Control panel opened')
+      hasBadge: true
     }
   ];
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl bg-gradient-to-br from-slate-900 via-[#0d1117] to-black border border-slate-800/80 overflow-hidden shadow-2xl flex flex-col justify-between p-6">
-      {/* Video Simulation Canvas */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950/60 to-black z-0 flex items-center justify-center pointer-events-none">
-        <div className="text-center space-y-3">
-          <div className="w-20 h-20 rounded-full border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center mx-auto backdrop-blur-md">
-            {isPlaying ? <Icons.Play size={32} className="text-cyan-400 animate-pulse ml-1" /> : <Icons.Pause size={32} className="text-slate-400" />}
-          </div>
-          <p className="text-slate-400 text-sm font-medium tracking-wide">
-            {isPlaying ? 'PLAYING: Interstellar - 4K Dolby Atmos' : 'PAUSED'}
-          </p>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/60 border border-slate-700/60 text-xs text-slate-300 font-mono">
-            <span>VOL: {volume}%</span>
-            <span>•</span>
-            <span>MIC: {isMuted ? 'MUTED' : 'ON'}</span>
-            <span>•</span>
-            <span>CAM: {videoActive ? 'LIVE' : 'OFF'}</span>
-          </div>
-        </div>
-      </div>
+    <div className="relative w-full h-full min-h-0 rounded-3xl bg-[#090b12] border border-white/[0.07] overflow-hidden flex flex-col justify-between p-6 sm:p-8">
+      {/* Background Ambient Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(56,189,248,0.06),transparent_60%)] pointer-events-none" />
 
-      {/* Top HUD */}
-      <div className="relative z-10 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-          <span className="text-xs font-semibold tracking-wider uppercase text-emerald-400">Media Master Stream</span>
-        </div>
-        <div className="text-xs font-mono text-slate-400 bg-slate-800/50 px-2.5 py-1 rounded-md border border-slate-700/40">
-          Last Action: <span className="text-cyan-300 font-semibold">{statusMsg}</span>
+      {/* Centerpiece Display (Clean Luxury Media Card) */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-4">
+        <div className="text-center space-y-4 max-w-sm">
+          {/* Animated Vinyl / Artwork Disk */}
+          <div className="relative mx-auto w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-white/10 bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center shadow-2xl shadow-cyan-500/10">
+            <div className={`w-10 h-10 rounded-full border border-cyan-500/30 bg-cyan-500/10 flex items-center justify-center ${isPlaying ? 'animate-spin' : ''}`} style={{ animationDuration: '8s' }}>
+              <div className="w-3 h-3 rounded-full bg-cyan-400" />
+            </div>
+            {/* Pulsing ring when playing */}
+            {isPlaying && (
+              <span className="absolute inset-0 rounded-full border border-cyan-500/20 animate-ping opacity-40" />
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight">
+              Chrono Symphony in D-Minor
+            </h3>
+            <p className="text-xs text-slate-400 font-mono">
+              Lossless 24-bit • {isPlaying ? 'Playing' : 'Paused'}
+            </p>
+          </div>
+
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono text-slate-300">
+            <span className="text-cyan-400">VOL {volume}%</span>
+            <span>•</span>
+            <span>{isMuted ? 'MIC OFF' : 'MIC ON'}</span>
+          </div>
         </div>
       </div>
 

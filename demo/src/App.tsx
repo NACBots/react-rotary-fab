@@ -4,7 +4,17 @@ import { MediaPlayerDemo } from './recipes/MediaPlayerDemo';
 import { CreativeStudioDemo } from './recipes/CreativeStudioDemo';
 import { SmartHomeDialDemo } from './recipes/SmartHomeDialDemo';
 import { MinimalCornerDemo } from './recipes/MinimalCornerDemo';
-import { Copy, Check, Github, Terminal, Sparkles, Layers, Sliders, Smartphone, ShieldCheck, Orbit, Play } from 'lucide-react';
+import {
+  Copy,
+  Check,
+  Github,
+  Terminal,
+  Code2,
+  X,
+  Orbit,
+  Smartphone,
+  ChevronDown
+} from 'lucide-react';
 
 export default function App() {
   const [placement, setPlacement] = useState<FabPlacement>('bottom-left');
@@ -13,6 +23,7 @@ export default function App() {
   const [showOrbitLines, setShowOrbitLines] = useState<boolean>(true);
   const [enableHaptics, setEnableHaptics] = useState(true);
   const [activeTab, setActiveTab] = useState<'media' | 'studio' | 'climate' | 'minimal'>('media');
+  const [showCodeModal, setShowCodeModal] = useState(false);
   const [copied, setCopied] = useState(false);
   const [copiedInstall, setCopiedInstall] = useState(false);
 
@@ -34,7 +45,7 @@ export default function MyComponent() {
   const items = [
     {
       id: 'vol',
-      title: 'Precision Volume Dial',
+      title: 'Volume Dial',
       icon: <Icons.Volume />,
       onClick: () => setIsDialMode(true)
     },
@@ -48,8 +59,7 @@ export default function MyComponent() {
     {
       id: 'mic',
       title: 'Mute Mic',
-      icon: <Icons.MicOn />,
-      danger: false
+      icon: <Icons.MicOn />
     },
     {
       id: 'settings',
@@ -88,217 +98,189 @@ export default function MyComponent() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const themesList: { id: FabTheme; name: string; dot: string }[] = [
+    { id: 'luxury-watch', name: 'Luxury Watch', dot: 'bg-amber-400' },
+    { id: 'glassmorphic', name: 'Glassmorphic', dot: 'bg-sky-400' },
+    { id: 'cyberpunk', name: 'Cyberpunk', dot: 'bg-yellow-400' },
+    { id: 'minimal-light', name: 'Minimal Light', dot: 'bg-white' },
+    { id: 'neon', name: 'Neon Nebula', dot: 'bg-fuchsia-400' }
+  ];
+
+  const animationModes: AnimationMode[] = [
+    'spring',
+    'stagger',
+    'spiral',
+    'fan',
+    'scale',
+    'elastic',
+    'fade',
+    'none'
+  ];
+
   return (
-    <div className="min-h-screen pb-24">
-      {/* Top Navigation */}
-      <header className="border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-              <span className="font-mono font-bold text-white text-sm">RF</span>
-            </div>
-            <div>
-              <span className="font-extrabold text-lg text-white tracking-tight">react-rotary-fab</span>
-              <span className="ml-2 px-2 py-0.5 text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-full">v1.0.0</span>
-            </div>
+    <div className="h-screen w-screen overflow-hidden bg-[#050609] text-slate-100 flex flex-col select-none">
+      {/* Minimal Top Navigation */}
+      <header className="h-13 border-b border-white/[0.06] bg-black/40 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-30">
+        {/* Brand */}
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 rounded-md bg-white text-black flex items-center justify-center font-mono font-black text-[11px] shadow-sm">
+            RF
           </div>
+          <span className="font-semibold text-sm tracking-tight text-white">react-rotary-fab</span>
+          <span className="hidden sm:inline text-[10px] font-mono text-zinc-400 px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06]">
+            v1.0.0
+          </span>
+        </div>
 
-          <div className="flex items-center gap-3">
+        {/* Center: Clean Segmented Presets */}
+        <div className="flex items-center gap-1 bg-white/[0.03] p-1 rounded-xl border border-white/[0.06]">
+          {[
+            { id: 'media', label: 'Media' },
+            { id: 'studio', label: 'Studio' },
+            { id: 'climate', label: 'Climate' },
+            { id: 'minimal', label: 'Minimal' }
+          ].map(tab => (
             <button
-              onClick={copyInstall}
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700/60 hover:border-cyan-500/40 text-xs font-mono text-slate-300 transition"
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`px-3 py-1 text-xs font-medium rounded-lg transition ${
+                activeTab === tab.id
+                  ? 'bg-white text-black font-semibold shadow-sm'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/[0.04]'
+              }`}
             >
-              <Terminal size={14} className="text-cyan-400" />
-              <span>npm i react-rotary-fab</span>
-              {copiedInstall ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} className="text-slate-400" />}
+              {tab.label}
             </button>
+          ))}
+        </div>
 
-            <a
-              href="https://github.com/nikhileashy/react-rotary-fab"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition shadow-sm"
-            >
-              <Github size={15} />
-              <span>GitHub</span>
-            </a>
-          </div>
+        {/* Right Actions */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={copyInstall}
+            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] text-xs font-mono text-zinc-300 transition"
+          >
+            <Terminal size={12} className="text-zinc-400" />
+            <span>npm i react-rotary-fab</span>
+            {copiedInstall ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-zinc-400" />}
+          </button>
+
+          <button
+            onClick={() => setShowCodeModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-medium text-zinc-300 hover:text-white transition"
+          >
+            <Code2 size={13} />
+            <span className="hidden sm:inline">Code</span>
+          </button>
+
+          <a
+            href="https://github.com/nikhileashy/react-rotary-fab"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-white text-xs font-medium transition"
+          >
+            <Github size={13} />
+            <span className="hidden sm:inline">GitHub</span>
+          </a>
         </div>
       </header>
 
-      {/* Hero Header */}
-      <section className="max-w-5xl mx-auto px-4 pt-12 pb-8 text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold tracking-wide">
-          <Sparkles size={13} />
-          <span>Precision Watchmaker Inspired UI Component</span>
-        </div>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-          Concentric Rotary FAB & <br className="hidden sm:block" />
-          <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
-            Precision Arc Dial for React
-          </span>
-        </h1>
-        <p className="max-w-2xl mx-auto text-slate-400 text-sm sm:text-base leading-relaxed">
-          A luxury timepiece aesthetic Floating Action Button with multi-tier concentric orbital arcs, 4-corner trigonometry, celestial micro-dots, tactile haptics, and zero external heavy UI dependencies.
-        </p>
-      </section>
-
-      {/* Main Interactive Stage */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left: Interactive Controls & Configuration */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Preset Selector */}
-          <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 backdrop-blur-md space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-              <Layers size={14} className="text-cyan-400" />
-              <span>Showcase Presets</span>
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
+      {/* Main Interactive Stage with Floating Island Toolbar */}
+      <main className="flex-1 p-3 sm:p-5 relative flex flex-col min-h-0 overflow-hidden">
+        {/* Floating Glassmorphic Control Island (Pinned Top-Center) */}
+        <div className="absolute top-6 sm:top-8 left-1/2 -translate-x-1/2 z-20 max-w-[94vw] overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-2 sm:gap-3 bg-black/70 backdrop-blur-2xl border border-white/[0.12] rounded-full px-3 sm:px-4 py-1.5 shadow-2xl shadow-black/80">
+            {/* Placement 4-Corner Selector */}
+            <div className="flex items-center gap-0.5 bg-white/[0.05] p-0.5 rounded-full border border-white/[0.08]">
               {[
-                { id: 'media', name: 'Media Stream' },
-                { id: 'studio', name: 'Design Studio' },
-                { id: 'climate', name: 'Climate Node' },
-                { id: 'minimal', name: 'Minimal 4-Arc' }
-              ].map(tab => (
+                { id: 'bottom-left', label: 'BL' },
+                { id: 'bottom-right', label: 'BR' },
+                { id: 'top-left', label: 'TL' },
+                { id: 'top-right', label: 'TR' }
+              ].map(p => (
                 <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-3 py-2 text-xs font-semibold rounded-xl text-left transition border ${
-                    activeTab === tab.id
-                      ? 'bg-cyan-500/10 border-cyan-500/40 text-cyan-300 shadow-sm shadow-cyan-500/10'
-                      : 'bg-slate-800/40 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                  key={p.id}
+                  onClick={() => setPlacement(p.id as FabPlacement)}
+                  className={`px-2 py-0.5 text-[10px] font-mono rounded-full transition ${
+                    placement === p.id
+                      ? 'bg-white text-black font-bold'
+                      : 'text-zinc-400 hover:text-white'
                   }`}
+                  title={p.id}
                 >
-                  {tab.name}
+                  {p.label}
                 </button>
               ))}
             </div>
-          </div>
 
-          {/* Placement & Theme & Animation Controls */}
-          <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 backdrop-blur-md space-y-5">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-              <Sliders size={14} className="text-cyan-400" />
-              <span>Interactive Controls</span>
-            </h3>
+            <span className="w-px h-3.5 bg-white/[0.12]" />
 
-            {/* Corner Placement */}
-            <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-300">Corner Placement</label>
-              <div className="grid grid-cols-2 gap-2">
-                {(['bottom-left', 'bottom-right', 'top-left', 'top-right'] as FabPlacement[]).map(pos => (
-                  <button
-                    key={pos}
-                    onClick={() => setPlacement(pos)}
-                    className={`px-2.5 py-1.5 text-xs font-mono rounded-lg transition border ${
-                      placement === pos
-                        ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300 font-semibold'
-                        : 'bg-slate-800/30 border-slate-800 text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    {pos}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Animation Modes */}
-            <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-                <Play size={12} className="text-cyan-400" />
-                <span>Animation Mode</span>
-              </label>
-              <div className="grid grid-cols-3 gap-1.5">
-                {(['spring', 'stagger', 'spiral', 'fan', 'scale', 'elastic', 'fade', 'none'] as AnimationMode[]).map(mode => (
-                  <button
-                    key={mode}
-                    onClick={() => setAnimationMode(mode)}
-                    className={`px-2 py-1.5 text-[11px] font-mono capitalize rounded-lg transition border ${
-                      animationMode === mode
-                        ? 'bg-cyan-500/20 border-cyan-500/60 text-cyan-300 font-semibold'
-                        : 'bg-slate-800/30 border-slate-800 text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
+            {/* Animation Mode Dropdown */}
+            <div className="relative flex items-center">
+              <select
+                value={animationMode}
+                onChange={e => setAnimationMode(e.target.value as AnimationMode)}
+                className="appearance-none bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.08] rounded-full px-2.5 py-1 pr-6 text-[11px] font-mono text-zinc-200 focus:outline-none cursor-pointer capitalize transition"
+              >
+                {animationModes.map(mode => (
+                  <option key={mode} value={mode} className="bg-zinc-900 text-white">
                     {mode}
-                  </button>
+                  </option>
                 ))}
-              </div>
+              </select>
+              <ChevronDown size={10} className="absolute right-2 pointer-events-none text-zinc-400" />
             </div>
 
-            {/* Themes */}
-            <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-300">Theme Preset</label>
-              <div className="grid grid-cols-1 gap-2">
-                {[
-                  { id: 'luxury-watch', name: 'Luxury Watchmaker (Obsidian & Jewels)' },
-                  { id: 'glassmorphic', name: 'Glassmorphic (Frosted Translucent)' },
-                  { id: 'cyberpunk', name: 'Cyberpunk 2077 (Neon Cyan & Yellow)' },
-                  { id: 'minimal-light', name: 'Minimal Light (Porcelain White)' },
-                  { id: 'neon', name: 'Neon Nebula (Ultra Violet & Magenta)' }
-                ].map(t => (
-                  <button
-                    key={t.id}
-                    onClick={() => setTheme(t.id as FabTheme)}
-                    className={`px-3 py-2 text-xs text-left rounded-xl transition border ${
-                      theme === t.id
-                        ? 'bg-cyan-500/10 border-cyan-500/40 text-cyan-300 font-semibold'
-                        : 'bg-slate-800/30 border-slate-800 text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
+            {/* Theme Dropdown */}
+            <div className="relative flex items-center">
+              <select
+                value={theme}
+                onChange={e => setTheme(e.target.value as FabTheme)}
+                className="appearance-none bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.08] rounded-full px-2.5 py-1 pr-6 text-[11px] font-medium text-zinc-200 focus:outline-none cursor-pointer transition"
+              >
+                {themesList.map(t => (
+                  <option key={t.id} value={t.id} className="bg-zinc-900 text-white">
                     {t.name}
-                  </button>
+                  </option>
                 ))}
-              </div>
+              </select>
+              <ChevronDown size={10} className="absolute right-2 pointer-events-none text-zinc-400" />
             </div>
 
-            {/* Toggles: Orbit Lines & Haptics */}
-            <div className="space-y-3 pt-2 border-t border-slate-800/60">
-              {/* Show Orbit Lines Toggle */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Orbit size={15} className="text-slate-400" />
-                  <span className="text-xs text-slate-300 font-medium">Show Orbit Outline</span>
-                </div>
-                <button
-                  onClick={() => setShowOrbitLines(o => !o)}
-                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
-                    showOrbitLines ? 'bg-cyan-500' : 'bg-slate-700'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition ${
-                      showOrbitLines ? 'translate-x-4.5' : 'translate-x-1'
-                    }`}
-                  />
-                </button>
-              </div>
+            <span className="w-px h-3.5 bg-white/[0.12]" />
 
-              {/* Haptics Toggle */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Smartphone size={15} className="text-slate-400" />
-                  <span className="text-xs text-slate-300 font-medium">Tactile Vibration Haptics</span>
-                </div>
-                <button
-                  onClick={() => setEnableHaptics(h => !h)}
-                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
-                    enableHaptics ? 'bg-cyan-500' : 'bg-slate-700'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition ${
-                      enableHaptics ? 'translate-x-4.5' : 'translate-x-1'
-                    }`}
-                  />
-                </button>
-              </div>
-            </div>
+            {/* Orbit Outline Toggle */}
+            <button
+              onClick={() => setShowOrbitLines(o => !o)}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition border ${
+                showOrbitLines
+                  ? 'bg-white/[0.12] border-white/[0.2] text-white'
+                  : 'bg-transparent border-transparent text-zinc-500 hover:text-zinc-300'
+              }`}
+              title="Toggle Concentric Orbit Lines"
+            >
+              <Orbit size={12} className={showOrbitLines ? 'text-cyan-400' : 'text-zinc-500'} />
+              <span className="hidden sm:inline">Orbit</span>
+            </button>
+
+            {/* Haptics Toggle */}
+            <button
+              onClick={() => setEnableHaptics(h => !h)}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition border ${
+                enableHaptics
+                  ? 'bg-white/[0.12] border-white/[0.2] text-white'
+                  : 'bg-transparent border-transparent text-zinc-500 hover:text-zinc-300'
+              }`}
+              title="Toggle Tactile Haptics"
+            >
+              <Smartphone size={12} className={enableHaptics ? 'text-emerald-400' : 'text-zinc-500'} />
+              <span className="hidden sm:inline">Haptics</span>
+            </button>
           </div>
         </div>
 
-        {/* Right: Live Interactive Sandbox & Code Snippet */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Active Canvas Showcase */}
+        {/* Live Interactive Stage Canvas */}
+        <div className="flex-1 w-full h-full min-h-0 relative rounded-3xl overflow-hidden border border-white/[0.06] shadow-2xl">
           {activeTab === 'media' && (
             <MediaPlayerDemo
               placement={placement}
@@ -335,63 +317,42 @@ export default function MyComponent() {
               enableHaptics={enableHaptics}
             />
           )}
+        </div>
+      </main>
 
-          {/* Live Generated Code Snippet */}
-          <div className="bg-[#090b10] border border-slate-800/90 rounded-2xl overflow-hidden shadow-2xl">
-            <div className="flex items-center justify-between px-5 py-3 bg-slate-900/60 border-b border-slate-800">
+      {/* Code Snippet Modal */}
+      {showCodeModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-[#090b10] border border-white/[0.1] rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between px-5 py-3.5 bg-white/[0.02] border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-                <span className="text-xs font-mono text-slate-400 ml-2">RotaryFabExample.tsx</span>
+                <span className="text-xs font-mono text-zinc-300 ml-2">RotaryFabExample.tsx</span>
               </div>
-              <button
-                onClick={copyCode}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-300 transition"
-              >
-                {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                <span>{copied ? 'Copied' : 'Copy JSX'}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={copyCode}
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-white text-xs font-mono transition"
+                >
+                  {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                  <span>{copied ? 'Copied' : 'Copy JSX'}</span>
+                </button>
+                <button
+                  onClick={() => setShowCodeModal(false)}
+                  className="p-1 rounded-lg hover:bg-white/[0.08] text-zinc-400 hover:text-white transition"
+                >
+                  <X size={16} />
+                </button>
+              </div>
             </div>
-            <pre className="p-5 font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed selection:bg-cyan-500/20">
+            <pre className="p-5 font-mono text-xs text-zinc-300 overflow-x-auto max-h-[60vh] leading-relaxed selection:bg-cyan-500/20">
               <code>{getCodeSnippet()}</code>
             </pre>
           </div>
         </div>
-      </main>
-
-      {/* Feature Highlights Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-            <Sparkles size={20} />
-          </div>
-          <h3 className="font-bold text-white text-base">Concentric Multi-Tier Arcs</h3>
-          <p className="text-slate-400 text-xs leading-relaxed">
-            Organize actions across concentric tiers with 8 animation modes: Spring, Stagger, Spiral, Fan, Scale, Elastic, Fade, or None.
-          </p>
-        </div>
-
-        <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-            <Sliders size={20} />
-          </div>
-          <h3 className="font-bold text-white text-base">Watchmaker Precision Dial</h3>
-          <p className="text-slate-400 text-xs leading-relaxed">
-            Synchronized progress direction, celestial micro-dots, precision tick marks, luminous jewel thumb knob, and keyboard/wheel support.
-          </p>
-        </div>
-
-        <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-            <ShieldCheck size={20} />
-          </div>
-          <h3 className="font-bold text-white text-base">Zero Heavy Dependencies</h3>
-          <p className="text-slate-400 text-xs leading-relaxed">
-            Pure React with zero heavy UI libraries. Includes toggleable orbit outlines, safe Web Vibration haptics, and complete TypeScript definitions.
-          </p>
-        </div>
-      </section>
+      )}
     </div>
   );
 }

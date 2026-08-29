@@ -18,65 +18,58 @@ export const CreativeStudioDemo: React.FC<CreativeStudioDemoProps> = ({
 }) => {
   const [activeTool, setActiveTool] = useState<string>('brush');
   const [zoomLevel, setZoomLevel] = useState<number>(100);
-  const [brushSize, setBrushSize] = useState<number>(14);
-  const [isDialMode, setIsDialMode] = useState(false);
-  const [dialTarget, setDialTarget] = useState<'zoom' | 'brush'>('zoom');
+  const [isDialMode, setIsDialMode] = useState<boolean>(false);
 
   const items: RotaryFabItem[] = [
     {
-      id: 'zoom-dial',
+      id: 'zoom',
       title: 'Canvas Zoom Dial',
-      icon: <Icons.ZoomIn size={18} />,
-      onClick: () => {
-        setDialTarget('zoom');
-        setIsDialMode(true);
-      }
+      icon: <Icons.Seek size={18} />,
+      onClick: () => setIsDialMode(true)
     },
     {
       id: 'brush',
-      title: 'Precision Brush Tool',
+      title: 'Brush Tool',
       icon: <Icons.Palette size={18} />,
       active: activeTool === 'brush',
       onClick: () => setActiveTool('brush')
     },
     {
       id: 'layers',
-      title: 'Layer Stack Inspector',
+      title: 'Layers Panel',
       icon: <Icons.Layers size={18} />,
       hasBadge: 3,
       onClick: () => setActiveTool('layers')
     },
     {
       id: 'effects',
-      title: 'Shader Effects & Filters',
+      title: 'Shader Filters',
       icon: <Icons.Zap size={18} />,
       onClick: () => setActiveTool('effects')
     }
   ];
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl bg-[#0e1017] border border-slate-800 overflow-hidden shadow-2xl flex flex-col justify-between p-6">
-      {/* Studio Canvas Grid Background */}
-      <div 
-        className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b18_1px,transparent_1px),linear-gradient(to_bottom,#1e293b18_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none flex items-center justify-center"
-      >
+    <div className="relative w-full h-full min-h-0 rounded-3xl bg-[#090b12] border border-white/[0.07] overflow-hidden flex flex-col justify-between p-6 sm:p-8">
+      {/* Studio Dot Grid Background */}
+      <div className="absolute inset-0 bg-dot-grid opacity-30 pointer-events-none" />
+
+      {/* Centerpiece Display (Minimal Vector Artboard) */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-4">
         <div 
-          className="w-72 h-72 border border-slate-700/60 bg-slate-900/40 rounded-xl flex items-center justify-center backdrop-blur-sm transition-transform duration-300"
+          className="w-56 h-56 sm:w-64 sm:h-64 border border-white/[0.12] bg-white/[0.02] rounded-2xl flex items-center justify-center backdrop-blur-sm transition-transform duration-300 shadow-2xl shadow-black/60"
           style={{ transform: `scale(${zoomLevel / 100})` }}
         >
           <div className="text-center space-y-2">
-            <span className="text-4xl">🎨</span>
-            <p className="text-slate-300 text-sm font-semibold">Creative Canvas</p>
-            <p className="text-slate-500 text-xs font-mono">Zoom: {zoomLevel}% • Tool: {activeTool.toUpperCase()}</p>
+            <span className="text-3xl">✦</span>
+            <p className="text-white text-sm font-medium tracking-tight">Artboard Canvas</p>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.06] text-[11px] font-mono text-slate-400">
+              <span>{zoomLevel}%</span>
+              <span>•</span>
+              <span className="text-cyan-400 uppercase">{activeTool}</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="relative z-10 flex justify-between items-center">
-        <span className="text-xs font-bold uppercase tracking-wider text-purple-400">Design Studio Pro</span>
-        <span className="text-xs font-mono text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700">
-          Scale: {zoomLevel}%
-        </span>
       </div>
 
       <RotaryFab
@@ -92,7 +85,7 @@ export const CreativeStudioDemo: React.FC<CreativeStudioDemoProps> = ({
         dialProps={{
           value: zoomLevel,
           min: 25,
-          max: 300,
+          max: 200,
           step: 5,
           unit: '% ZOOM',
           onChange: setZoomLevel

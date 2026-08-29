@@ -2,6 +2,7 @@
 src/
 test/
 demo/
+assets/
 .github/
 
 # Config files

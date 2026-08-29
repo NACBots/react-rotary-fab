@@ -1,3 +1,4 @@
+import React from 'react';
 import { RotaryFab, RotaryFabItem, FabPlacement, FabTheme, AnimationMode, Icons } from 'react-rotary-fab';
 
 interface MinimalCornerDemoProps {
@@ -23,16 +24,15 @@ export const MinimalCornerDemo: React.FC<MinimalCornerDemoProps> = ({
   ];
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl bg-[#090b10] border border-slate-800/80 overflow-hidden shadow-2xl flex flex-col justify-between p-6">
-      <div className="relative z-10 flex justify-between items-center">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Minimal Single-Arc Quadrant</span>
-        <span className="text-xs font-mono text-slate-400 bg-slate-800/40 px-2.5 py-1 rounded border border-slate-700/50">
-          Tier: 1 (4 items)
-        </span>
-      </div>
-
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <p className="text-slate-500 text-sm">Click the floating button in the corner to toggle the menu.</p>
+    <div className="relative w-full h-full min-h-0 rounded-3xl bg-[#090b12] border border-white/[0.07] overflow-hidden flex flex-col justify-between p-6 sm:p-8">
+      {/* Centerpiece Minimal Hint */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-4">
+        <div className="text-center space-y-2">
+          <div className="w-12 h-12 rounded-full border border-white/[0.1] bg-white/[0.03] flex items-center justify-center mx-auto text-slate-400">
+            <Icons.Layers size={20} />
+          </div>
+          <p className="text-xs font-mono text-slate-400">Single 4-Action Tier Arc</p>
+        </div>
       </div>
 
       <RotaryFab
@@ -43,7 +43,7 @@ export const MinimalCornerDemo: React.FC<MinimalCornerDemoProps> = ({
         showOrbitLines={showOrbitLines}
         style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
-        arcConfigs={[{ maxCount: 4, radius: 92, btnSize: 40, iconSize: 18 }]}
+        arcConfigs={[{ maxCount: 4, radius: 96, btnSize: 40, iconSize: 18 }]}
       />
     </div>
   );

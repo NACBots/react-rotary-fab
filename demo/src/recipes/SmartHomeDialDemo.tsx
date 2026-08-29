@@ -29,33 +29,39 @@ export const SmartHomeDialDemo: React.FC<SmartHomeDialDemoProps> = ({
     },
     {
       id: 'eco',
-      title: isEcoMode ? 'Eco Mode Active (Energy Saver)' : 'Turbo AC Mode',
+      title: isEcoMode ? 'Eco Mode Active' : 'Turbo Mode',
       icon: <Icons.Zap size={18} />,
       active: isEcoMode,
       onClick: () => setIsEcoMode(e => !e)
     },
     {
       id: 'settings',
-      title: 'Thermostat Schedules',
+      title: 'Settings',
       icon: <Icons.Settings size={18} />
     }
   ];
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl bg-gradient-to-tr from-[#0b101e] via-[#111827] to-[#030712] border border-slate-800 overflow-hidden shadow-2xl flex flex-col justify-between p-6">
-      <div className="relative z-10 flex justify-between items-center">
-        <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">Smart Thermostat Node</span>
-        <span className="text-xs font-mono text-cyan-300 bg-cyan-950/60 px-2.5 py-1 rounded-md border border-cyan-800/60">
-          Target: {temperature}°C ({isEcoMode ? 'ECO' : 'TURBO'})
-        </span>
-      </div>
+    <div className="relative w-full h-full min-h-0 rounded-3xl bg-[#090b12] border border-white/[0.07] overflow-hidden flex flex-col justify-between p-6 sm:p-8">
+      {/* Ambient Climate Radial Glow */}
+      <div 
+        className="absolute inset-0 transition-opacity duration-700 pointer-events-none"
+        style={{
+          background: `radial-gradient(circle at 50% 50%, ${temperature > 24 ? 'rgba(239,68,68,0.08)' : temperature < 20 ? 'rgba(56,189,248,0.08)' : 'rgba(16,185,129,0.08)'}, transparent 60%)`
+        }}
+      />
 
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="text-center">
-          <div className="text-6xl font-extrabold tracking-tighter text-white font-mono flex items-start justify-center">
-            {temperature}<span className="text-2xl text-cyan-400 ml-1">°C</span>
+      {/* Centerpiece Climate Display */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-4">
+        <div className="text-center space-y-2">
+          <div className="text-6xl sm:text-7xl font-extrabold tracking-tighter text-white font-mono flex items-start justify-center">
+            {temperature.toFixed(1)}<span className="text-2xl text-cyan-400 ml-1 font-sans">°C</span>
           </div>
-          <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold mt-2">Living Room Climate</p>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono text-slate-300">
+            <span>CLIMATE NODE</span>
+            <span>•</span>
+            <span className={isEcoMode ? 'text-emerald-400' : 'text-amber-400'}>{isEcoMode ? 'ECO' : 'TURBO'}</span>
+          </div>
         </div>
       </div>
 
@@ -72,7 +78,7 @@ export const SmartHomeDialDemo: React.FC<SmartHomeDialDemoProps> = ({
         dialProps={{
           value: temperature,
           min: 16,
-          max: 32,
+          max: 30,
           step: 0.5,
           unit: '°C TEMP',
           onChange: setTemperature

@@ -1,11 +1,24 @@
+<p align="center">
+  <img src="assets/banner.png" alt="react-rotary-fab banner" width="100%" style="border-radius: 12px;" />
+</p>
+
 # react-rotary-fab ⏱✨
 
 [![npm version](https://img.shields.io/npm/v/react-rotary-fab.svg?color=38bdf8)](https://www.npmjs.com/package/react-rotary-fab)
+[![Live Demo](https://img.shields.io/badge/Demo-rotary--fab.nacbots.com-38bdf8?logo=vercel)](https://rotary-fab.nacbots.com)
 [![license](https://img.shields.io/npm/l/react-rotary-fab.svg?color=10b981)](https://github.com/nikhileashy/react-rotary-fab/blob/main/LICENSE)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/react-rotary-fab?color=8b5cf6)](https://bundlephobia.com/package/react-rotary-fab)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
 > A luxury watchmaker-inspired, highly customizable concentric rotary **Floating Action Button (FAB)** and precision **Rotary Arc Dial / Slider** for React.
+
+---
+
+## 🎬 Video Preview
+
+<div align="center">
+  <video src="assets/demo.mp4" controls width="100%" style="max-height: 480px; border-radius: 12px;"></video>
+</div>
 
 ---
 

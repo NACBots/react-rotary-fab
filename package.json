@@ -48,7 +48,7 @@
   "bugs": {
     "url": "https://github.com/nikhileashy/react-rotary-fab/issues"
   },
-  "homepage": "https://github.com/nikhileashy/react-rotary-fab#readme",
+  "homepage": "https://rotary-fab.nacbots.com",
   "scripts": {
     "dev": "npm --prefix demo run dev",
     "build": "tsup",
