@@ -36,6 +36,7 @@ export const MinimalCornerDemo: React.FC<MinimalCornerDemoProps> = ({
         items={items}
         placement={placement}
         theme={theme}
+        style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
         arcConfigs={[{ maxCount: 4, radius: 92, btnSize: 40, iconSize: 18 }]}
       />

@@ -150,6 +150,7 @@ export const MediaPlayerDemo: React.FC<MediaPlayerDemoProps> = ({
         items={items}
         placement={placement}
         theme={theme}
+        style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
         dialMode={isDialOpen}
         onDialModeChange={setIsDialOpen}

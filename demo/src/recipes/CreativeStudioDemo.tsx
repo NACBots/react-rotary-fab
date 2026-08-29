@@ -79,6 +79,7 @@ export const CreativeStudioDemo: React.FC<CreativeStudioDemoProps> = ({
         items={items}
         placement={placement}
         theme={theme}
+        style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
         dialMode={isDialMode}
         onDialModeChange={setIsDialMode}

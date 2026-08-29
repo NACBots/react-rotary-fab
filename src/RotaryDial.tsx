@@ -120,6 +120,21 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
     );
   };
 
+  const getSvgPosition = (): React.CSSProperties => {
+    switch (placement) {
+      case 'bottom-left':
+        return { bottom: 0, left: 0 };
+      case 'bottom-right':
+        return { bottom: 0, right: 0 };
+      case 'top-left':
+        return { top: 0, left: 0 };
+      case 'top-right':
+        return { top: 0, right: 0 };
+      default:
+        return { bottom: 0, left: 0 };
+    }
+  };
+
   return (
     <div
       className={`rf-dial-container ${isDragging ? 'rf-dial-dragging' : ''} ${
@@ -142,6 +157,11 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         height={svgInfo.height}
         viewBox={svgInfo.viewBox}
         className="rf-dial-svg"
+        style={{
+          position: 'absolute',
+          ...getSvgPosition(),
+          overflow: 'visible'
+        }}
         onPointerDown={disabled ? undefined : handlePointerDown}
         onPointerMove={disabled ? undefined : handlePointerMove}
         onPointerUp={disabled ? undefined : handlePointerUp}

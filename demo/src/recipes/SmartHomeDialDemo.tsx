@@ -59,6 +59,7 @@ export const SmartHomeDialDemo: React.FC<SmartHomeDialDemoProps> = ({
         items={items}
         placement={placement}
         theme={theme}
+        style={{ position: 'absolute' }}
         enableHaptics={enableHaptics}
         dialMode={isDialMode}
         onDialModeChange={setIsDialMode}

@@ -183,9 +183,10 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
         isDialMode ? 'rf-dial-mode' : ''
       } ${className}`}
       style={{
+        '--rf-main-size': `${mainButtonSize}px`,
         ...themeStyle,
         ...style
-      }}
+      } as React.CSSProperties}
     >
       {/* Corner Ambient Backdrop */}
       {showCornerBackdrop && <div className="rf-backdrop" aria-hidden="true" />}

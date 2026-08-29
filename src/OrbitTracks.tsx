@@ -16,6 +16,21 @@ export const OrbitTracks: React.FC<OrbitTracksProps> = ({
   const span = getPlacementAngleSpan(placement);
   const svgInfo = getSvgViewBox(maxRadius, 24, placement);
 
+  const getSvgPosition = (): React.CSSProperties => {
+    switch (placement) {
+      case 'bottom-left':
+        return { bottom: 0, left: 0 };
+      case 'bottom-right':
+        return { bottom: 0, right: 0 };
+      case 'top-left':
+        return { top: 0, left: 0 };
+      case 'top-right':
+        return { top: 0, right: 0 };
+      default:
+        return { bottom: 0, left: 0 };
+    }
+  };
+
   return (
     <svg
       className="rf-orbit-tracks-svg"
@@ -25,10 +40,7 @@ export const OrbitTracks: React.FC<OrbitTracksProps> = ({
       aria-hidden="true"
       style={{
         position: 'absolute',
-        top: placement.includes('top') ? 0 : 'auto',
-        bottom: placement.includes('bottom') ? 0 : 'auto',
-        left: placement.includes('left') ? 0 : 'auto',
-        right: placement.includes('right') ? 0 : 'auto',
+        ...getSvgPosition(),
         overflow: 'visible',
         pointerEvents: 'none',
         zIndex: 1

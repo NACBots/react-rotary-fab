@@ -30,6 +30,8 @@
 
 .rf-container {
   position: fixed;
+  width: var(--rf-main-size, 52px);
+  height: var(--rf-main-size, 52px);
   z-index: 9999;
   user-select: none;
   -webkit-user-select: none;
@@ -144,6 +146,8 @@
 
 .rf-main-btn {
   position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -197,8 +201,10 @@
 
 .rf-wheel {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
   pointer-events: none;
   opacity: 0;
   transform: scale(0.6);
@@ -206,7 +212,7 @@
   z-index: 10;
 }
 
-.rf-open .rf-wheel {
+.rf-open:not(.rf-dial-mode) .rf-wheel {
   opacity: 1;
   transform: scale(1);
   pointer-events: auto;
@@ -362,8 +368,10 @@
 
 .rf-dial-wrapper {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
   pointer-events: auto;
   z-index: 15;
   animation: rf-dial-in 0.35s var(--rf-transition-timing);
@@ -397,8 +405,6 @@
 
 .rf-chrono-badge {
   position: absolute;
-  top: 14px;
-  left: 14px;
   display: flex;
   align-items: baseline;
   gap: 4px;
@@ -411,6 +417,28 @@
   -webkit-backdrop-filter: blur(8px);
   font-variant-numeric: tabular-nums;
   pointer-events: none;
+  white-space: nowrap;
+  z-index: 20;
+}
+
+.rf-placement-bottom-left .rf-chrono-badge {
+  bottom: 34px;
+  left: 34px;
+}
+
+.rf-placement-bottom-right .rf-chrono-badge {
+  bottom: 34px;
+  right: 34px;
+}
+
+.rf-placement-top-left .rf-chrono-badge {
+  top: 34px;
+  left: 34px;
+}
+
+.rf-placement-top-right .rf-chrono-badge {
+  top: 34px;
+  right: 34px;
 }
 
 .rf-chrono-val {
