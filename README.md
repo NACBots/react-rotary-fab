@@ -284,7 +284,7 @@ Or pass `customTheme` directly to the component:
     <td align="center">
       <a href="https://github.com/nikhileashy">
         <img src="https://github.com/nikhileashy.png?size=100" width="100px;" alt="nikhileashy" style="border-radius: 50%;" /><br />
-        <sub><b>Nikhil</b></sub>
+        <sub><b>Nikhil Eashy</b></sub>
       </a><br />
       <sub>💻 Code, Architecture & Development</sub>
     </td>
@@ -308,4 +308,4 @@ Contributions are welcome! Please check out [CONTRIBUTING.md](CONTRIBUTING.md) f
 
 ## 📄 License
 
-MIT © [Nikhil](LICENSE)
+MIT © [Nikhil Eashy](LICENSE)
