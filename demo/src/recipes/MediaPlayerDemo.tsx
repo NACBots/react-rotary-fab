@@ -137,7 +137,7 @@ export const MediaPlayerDemo: React.FC<MediaPlayerDemoProps> = ({
           max: 100,
           step: 1,
           unit: '% VOL',
-          onChange: val => {
+          onChange: (val: number) => {
             setVolume(val);
             if (isMuted && val > 0) setIsMuted(false);
           }
