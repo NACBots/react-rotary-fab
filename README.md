@@ -277,15 +277,32 @@ Or pass `customTheme` directly to the component:
 
 ---
 
-## 🤝 Contributing
+## 👥 Contributors
 
-Contributions are welcome! Please check out [CONTRIBUTING.md](CONTRIBUTING.md) for details on setting up the development environment, running tests, and opening pull requests.
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/nikhileashy">
+        <img src="https://github.com/nikhileashy.png?size=100" width="100px;" alt="nikhileashy" style="border-radius: 50%;" /><br />
+        <sub><b>Nikhil</b></sub>
+      </a><br />
+      <sub>💻 Code, Architecture & Development</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/neehanazer">
+        <img src="https://github.com/neehanazer.png?size=100" width="100px;" alt="neehanazer" style="border-radius: 50%;" /><br />
+        <sub><b>Neeha Nazer</b></sub>
+      </a><br />
+      <sub>🎨 Design, Aesthetics & Concept Contribution</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## ✨ Credits & Acknowledgements
+## 🤝 Contributing
 
-Special thanks to [**@neehanazer**](https://github.com/neehanazer) for the luxury watchmaker design and concept contribution that inspired this component.
+Contributions are welcome! Please check out [CONTRIBUTING.md](CONTRIBUTING.md) for details on setting up the development environment, running tests, and opening pull requests.
 
 ---
 
