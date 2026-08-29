@@ -1,0 +1,454 @@
+/**
+ * react-rotary-fab styles
+ * Luxury watchmaker-inspired concentric rotary FAB and precision arc dial
+ */
+
+:root {
+  --rf-bg-main: linear-gradient(135deg, #18191c 0%, #0d0e11 100%);
+  --rf-bg-item: rgba(24, 25, 29, 0.88);
+  --rf-bg-item-hover: rgba(42, 44, 52, 0.96);
+  --rf-bg-item-active: #ffffff;
+  --rf-border: rgba(255, 255, 255, 0.18);
+  --rf-text: #ffffff;
+  --rf-text-muted: rgba(255, 255, 255, 0.55);
+  --rf-accent: #ffffff;
+  --rf-accent-glow: rgba(255, 255, 255, 0.75);
+  --rf-danger: #ef4444;
+  --rf-danger-glow: rgba(239, 68, 68, 0.7);
+  --rf-track: rgba(255, 255, 255, 0.15);
+  --rf-fill: #ffffff;
+  --rf-backdrop: radial-gradient(circle at bottom left, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 70%);
+  --rf-shadow: 0 8px 32px rgba(0, 0, 0, 0.65);
+  --rf-tooltip-bg: #0f1013;
+  --rf-tooltip-text: #ffffff;
+  --rf-transition-timing: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Root Container & Corner Placements
+   ========================================================================== */
+
+.rf-container {
+  position: fixed;
+  z-index: 9999;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  color: var(--rf-text);
+}
+
+.rf-container * {
+  box-sizing: border-box;
+}
+
+.rf-placement-bottom-left {
+  bottom: 28px;
+  left: 28px;
+}
+
+.rf-placement-bottom-right {
+  bottom: 28px;
+  right: 28px;
+}
+
+.rf-placement-top-left {
+  top: 28px;
+  left: 28px;
+}
+
+.rf-placement-top-right {
+  top: 28px;
+  right: 28px;
+}
+
+.rf-placement-bottom-center {
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rf-placement-top-center {
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rf-placement-left-center {
+  top: 50%;
+  left: 28px;
+  transform: translateY(-50%);
+}
+
+.rf-placement-right-center {
+  top: 50%;
+  right: 28px;
+  transform: translateY(-50%);
+}
+
+.rf-placement-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ==========================================================================
+   Ambient Corner Backdrop
+   ========================================================================== */
+
+.rf-backdrop {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.4s ease, transform 0.4s var(--rf-transition-timing);
+  z-index: 0;
+}
+
+.rf-placement-bottom-left .rf-backdrop {
+  bottom: -40px;
+  left: -40px;
+  background: var(--rf-backdrop);
+}
+
+.rf-placement-bottom-right .rf-backdrop {
+  bottom: -40px;
+  right: -40px;
+  background: radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.rf-placement-top-left .rf-backdrop {
+  top: -40px;
+  left: -40px;
+  background: radial-gradient(circle at top left, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.rf-placement-top-right .rf-backdrop {
+  top: -40px;
+  right: -40px;
+  background: radial-gradient(circle at top right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.rf-open .rf-backdrop,
+.rf-dial-mode .rf-backdrop {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ==========================================================================
+   Primary Floating Action Button (Main FAB)
+   ========================================================================== */
+
+.rf-main-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--rf-bg-main);
+  border: 1px solid var(--rf-border);
+  color: var(--rf-text);
+  box-shadow: var(--rf-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  pointer-events: auto;
+  outline: none;
+  z-index: 100;
+  padding: 0;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.3s var(--rf-transition-timing), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.rf-main-btn:hover {
+  transform: scale(1.06);
+  border-color: var(--rf-accent);
+  box-shadow: var(--rf-shadow), 0 0 16px var(--rf-accent-glow);
+}
+
+.rf-main-btn:active {
+  transform: scale(0.96);
+}
+
+.rf-main-btn:focus-visible {
+  box-shadow: var(--rf-shadow), 0 0 0 3px var(--rf-accent-glow);
+}
+
+.rf-main-btn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s var(--rf-transition-timing);
+}
+
+.rf-main-open .rf-main-btn-inner {
+  transform: rotate(90deg);
+}
+
+.rf-main-dial .rf-main-btn-inner {
+  transform: rotate(0deg);
+}
+
+/* ==========================================================================
+   Rotary Concentric Wheel & Items
+   ========================================================================== */
+
+.rf-wheel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.3s var(--rf-transition-timing), transform 0.35s var(--rf-transition-timing);
+  z-index: 10;
+}
+
+.rf-open .rf-wheel {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.rf-item-wrapper {
+  position: absolute;
+  pointer-events: auto;
+  transition: transform 0.4s var(--rf-transition-timing);
+}
+
+.rf-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--rf-bg-item);
+  border: 1px solid var(--rf-border);
+  color: var(--rf-text);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 0.2s ease, transform 0.2s var(--rf-transition-timing), border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.rf-item:hover {
+  background: var(--rf-bg-item-hover);
+  border-color: var(--rf-accent);
+  transform: scale(1.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55), 0 0 12px var(--rf-accent-glow);
+}
+
+.rf-item:active {
+  transform: scale(0.92);
+}
+
+.rf-item-active {
+  background: var(--rf-bg-item-active) !important;
+  color: #0d0e11 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.8) !important;
+}
+
+.rf-item-danger {
+  color: var(--rf-danger) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+.rf-item-danger:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: var(--rf-danger) !important;
+  box-shadow: 0 0 14px var(--rf-danger-glow) !important;
+}
+
+.rf-item-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Item Badges */
+.rf-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  background: var(--rf-accent, #ffffff);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.rf-badge-dot {
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 6px var(--rf-accent-glow, #ffffff);
+}
+
+.rf-badge-count {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 4px;
+  min-width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  border-radius: 8px;
+  box-shadow: 0 0 8px var(--rf-accent-glow, #ffffff);
+}
+
+/* ==========================================================================
+   Tooltips (Zero-dependency)
+   ========================================================================== */
+
+.rf-tooltip {
+  position: absolute;
+  background: var(--rf-tooltip-bg);
+  color: var(--rf-tooltip-text);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  padding: 5px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--rf-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  z-index: 1000;
+  animation: rf-fade-in 0.15s var(--rf-transition-timing);
+}
+
+@keyframes rf-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.rf-tooltip-top {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rf-tooltip-bottom {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rf-tooltip-right {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rf-tooltip-left {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ==========================================================================
+   Rotary Dial & Precision Arc Slider
+   ========================================================================== */
+
+.rf-dial-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: auto;
+  z-index: 15;
+  animation: rf-dial-in 0.35s var(--rf-transition-timing);
+}
+
+@keyframes rf-dial-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.rf-dial-container {
+  position: relative;
+  outline: none;
+  cursor: grab;
+}
+
+.rf-dial-container:active,
+.rf-dial-dragging {
+  cursor: grabbing;
+}
+
+.rf-dial-svg {
+  overflow: visible;
+}
+
+.rf-chrono-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  background: var(--rf-bg-item);
+  border: 1px solid var(--rf-border);
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.rf-chrono-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--rf-text);
+}
+
+.rf-chrono-unit {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--rf-text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .rf-placement-bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+  .rf-placement-bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+  .rf-placement-top-left {
+    top: 20px;
+    left: 20px;
+  }
+  .rf-placement-top-right {
+    top: 20px;
+    right: 20px;
+  }
+  .rf-main-btn {
+    width: 46px !important;
+    height: 46px !important;
+  }
+}

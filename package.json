@@ -1,0 +1,87 @@
+{
+  "name": "react-rotary-fab",
+  "version": "1.0.0",
+  "description": "A luxury watchmaker-inspired, highly customizable concentric rotary Floating Action Button (FAB) and precision arc dial for React.",
+  "author": "Nikhil <nikhil@example.com>",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./styles.css": "./dist/index.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "react",
+    "fab",
+    "floating-action-button",
+    "rotary",
+    "rotary-dial",
+    "radial-menu",
+    "concentric-menu",
+    "circular-slider",
+    "arc-slider",
+    "dial",
+    "haptic",
+    "tactile-ui",
+    "video-controls",
+    "watch-ui",
+    "luxury-ui",
+    "react-component",
+    "ui-component"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/react-rotary-fab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/react-rotary-fab/issues"
+  },
+  "homepage": "https://github.com/your-username/react-rotary-fab#readme",
+  "scripts": {
+    "dev": "npm --prefix demo run dev",
+    "build": "tsup",
+    "build:demo": "npm --prefix demo run build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rimraf dist demo/dist",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": ">=16.8.0 || ^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.13.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "jsdom": "^26.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,18 @@
+# Source files not needed in published package
+src/
+test/
+demo/
+.github/
+
+# Config files
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+.gitignore
+.npmignore
+RotaryFab.jsx
+
+# Logs & temp
+*.log
+coverage/
+node_modules/
