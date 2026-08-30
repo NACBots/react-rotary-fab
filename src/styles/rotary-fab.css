@@ -610,6 +610,10 @@
   position: absolute;
   outline: none;
   cursor: grab;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* Standalone corner placements */
@@ -669,6 +673,9 @@
 
 .rf-dial-svg {
   overflow: visible;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .rf-chrono-badge {

@@ -182,62 +182,65 @@ export function getSvgViewBox(
 }
 
 /**
- * Computes normalized progress (0.0 to 1.0) from pointer event and origin coordinates.
+ * Computes normalized progress (0.0 to 1.0) from pointer event and container DOMRect.
+ * Flawlessly calculates smooth, jump-free angles in all 4 quadrant corners.
  */
 export function calculatePointerNormalized(
   clientX: number,
   clientY: number,
-  originX: number,
-  originY: number,
+  rect: DOMRect,
   placement: FabPlacement = 'bottom-left'
 ): number {
+  let originX = rect.left;
+  let originY = rect.top;
+
+  switch (placement) {
+    case 'bottom-left':
+      originX = rect.left;
+      originY = rect.bottom;
+      break;
+    case 'bottom-right':
+      originX = rect.right;
+      originY = rect.bottom;
+      break;
+    case 'top-left':
+      originX = rect.left;
+      originY = rect.top;
+      break;
+    case 'top-right':
+      originX = rect.right;
+      originY = rect.top;
+      break;
+    default:
+      originX = rect.left;
+      originY = rect.bottom;
+  }
+
   const dx = clientX - originX;
   const dy = clientY - originY;
 
-  // In screen space, dy < 0 is upwards, dy > 0 is downwards
-  // Math.atan2(-dy, dx) gives angle in radians from horizontal right (0 rad) upwards (π/2 rad)
-  let angleRad = Math.atan2(-dy, dx);
-  if (angleRad < 0) {
-    angleRad += 2 * Math.PI;
-  }
-  const angleDeg = (angleRad * 180) / Math.PI;
+  let angleDeg = 0;
 
   if (placement === 'bottom-left') {
-    // 0 deg (right) is 0%, 90 deg (top) is 100%
-    const clampedDeg = Math.max(0, Math.min(90, angleDeg));
-    return clampedDeg / 90;
+    // dx > 0 (right: 0%), -dy > 0 (up: 100%)
+    const rad = Math.atan2(-dy, dx);
+    angleDeg = (rad * 180) / Math.PI;
+  } else if (placement === 'bottom-right') {
+    // dx < 0 (left: 0%), -dy > 0 (up: 100%)
+    const rad = Math.atan2(-dy, -dx);
+    angleDeg = (rad * 180) / Math.PI;
+  } else if (placement === 'top-left') {
+    // dx > 0 (right: 0%), dy > 0 (down: 100%)
+    const rad = Math.atan2(dy, dx);
+    angleDeg = (rad * 180) / Math.PI;
+  } else if (placement === 'top-right') {
+    // dx < 0 (left: 0%), dy > 0 (down: 100%)
+    const rad = Math.atan2(dy, -dx);
+    angleDeg = (rad * 180) / Math.PI;
   }
 
-  if (placement === 'bottom-right') {
-    // 180 deg (left) is 0%, 90 deg (top) is 100%
-    let deg = angleDeg;
-    if (deg < 90) deg = 90;
-    if (deg > 180) deg = 180;
-    return (180 - deg) / 90;
-  }
-
-  if (placement === 'top-left') {
-    // 360 deg / 0 deg (right) is 0%, 270 deg (bottom) is 100%
-    let deg = angleDeg;
-    if (deg < 270 && deg > 90) deg = 270;
-    if (deg >= 270) {
-      return (360 - deg) / 90;
-    }
-    return 0;
-  }
-
-  if (placement === 'top-right') {
-    // 180 deg (left) is 0%, 270 deg (bottom) is 100%
-    let deg = angleDeg;
-    if (deg < 180) deg = 180;
-    if (deg > 270) deg = 270;
-    return (deg - 180) / 90;
-  }
-
-  const span = getDialAngleSpan(placement);
-  const diff = span.maxDeg - span.zeroDeg;
-  let normalized = (angleDeg - span.zeroDeg) / diff;
-  return Math.max(0, Math.min(1, normalized));
+  const clampedDeg = Math.max(0, Math.min(90, angleDeg));
+  return clampedDeg / 90;
 }
 
 /**

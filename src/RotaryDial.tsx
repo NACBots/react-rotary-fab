@@ -4,6 +4,7 @@ import {
   describeArc,
   getDialAngleSpan,
   getSvgViewBox,
+  calculatePointerNormalized,
   generateWatchDialTicks,
   generateCelestialDots,
   polarToCartesian
@@ -51,13 +52,16 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
 
   const currentValue = isControlled ? (controlledValue as number) : internalValue;
 
-  const handleValueChange = (newVal: number) => {
-    if (disabled) return;
-    if (!isControlled) {
-      setInternalValue(newVal);
-    }
-    onChange?.(newVal);
-  };
+  const handleValueChange = useCallback(
+    (newVal: number) => {
+      if (disabled) return;
+      if (!isControlled) {
+        setInternalValue(newVal);
+      }
+      onChange?.(newVal);
+    },
+    [disabled, isControlled, onChange]
+  );
 
   const span = getDialAngleSpan(placement);
   const normalized = Math.max(0, Math.min(1, (currentValue - min) / (max - min || 1)));
@@ -89,37 +93,30 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
     (clientX: number, clientY: number) => {
       if (!containerRef.current || disabled) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const originX = rect.left;
-      const originY = rect.top;
+      const normalizedPercent = calculatePointerNormalized(clientX, clientY, rect, placement);
 
-      const dx = clientX - originX;
-      const dy = clientY - originY;
-      let angleRad = Math.atan2(dy, dx);
-      let angleDeg = (angleRad * 180) / Math.PI;
-      if (angleDeg < 0) angleDeg += 360;
-
-      const dialSpan = getDialAngleSpan(placement);
-      let rawPercent = (angleDeg - dialSpan.zeroDeg) / (dialSpan.maxDeg - dialSpan.zeroDeg);
-
-      rawPercent = Math.max(0, Math.min(1, rawPercent));
-      const rawValue = min + rawPercent * (max - min);
+      const rawValue = min + normalizedPercent * (max - min);
       const steppedValue = Math.round(rawValue / step) * step;
       const clampedValue = Math.max(min, Math.min(max, steppedValue));
 
       handleValueChange(Number(clampedValue.toFixed(4)));
     },
-    [placement, min, max, step, disabled]
+    [placement, min, max, step, disabled, handleValueChange]
   );
 
   const handlePointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
     if (disabled) return;
-    (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    e.preventDefault();
+    try {
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    } catch {}
     setIsDragging(true);
     updatePointerPosition(e.clientX, e.clientY);
   };
 
   const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     if (!isDragging || disabled) return;
+    e.preventDefault();
     updatePointerPosition(e.clientX, e.clientY);
   };
 
@@ -132,6 +129,30 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
       onChangeEnd?.(currentValue);
     }
   };
+
+  // Global pointer listeners to ensure buttery smooth tracking even outside bounds
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleGlobalMove = (e: PointerEvent) => {
+      updatePointerPosition(e.clientX, e.clientY);
+    };
+
+    const handleGlobalUp = () => {
+      setIsDragging(false);
+      onChangeEnd?.(currentValue);
+    };
+
+    window.addEventListener('pointermove', handleGlobalMove, { passive: true });
+    window.addEventListener('pointerup', handleGlobalUp, { passive: true });
+    window.addEventListener('pointercancel', handleGlobalUp, { passive: true });
+
+    return () => {
+      window.removeEventListener('pointermove', handleGlobalMove);
+      window.removeEventListener('pointerup', handleGlobalUp);
+      window.removeEventListener('pointercancel', handleGlobalUp);
+    };
+  }, [isDragging, updatePointerPosition, onChangeEnd, currentValue]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (disabled) return;
@@ -219,6 +240,9 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
       } ${disabled ? 'rf-dial-disabled' : ''} ${className}`}
       style={{
         ...getPlacementStyle(),
+        touchAction: 'none',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
         ...style
       }}
       tabIndex={disabled ? -1 : 0}
@@ -238,7 +262,8 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         viewBox={svgInfo.viewBox}
         className="rf-dial-svg"
         style={{
-          overflow: 'visible'
+          overflow: 'visible',
+          touchAction: 'none'
         }}
         onPointerDown={disabled ? undefined : handlePointerDown}
         onPointerMove={disabled ? undefined : handlePointerMove}

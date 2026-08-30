@@ -61,14 +61,20 @@ describe('Geometry Utils', () => {
     expect(br.viewBox).toBe('-120 -120 120 120');
   });
 
-  it('calculates pointer normalization correctly for bottom-left', () => {
-    // Origin at (0, 0), pointer at (100, 0) -> angle 0 deg -> 0%
-    const norm0 = calculatePointerNormalized(100, 0, 0, 0, 'bottom-left');
+  it('calculates pointer normalization correctly for bottom-left and other placements', () => {
+    const mockRect = { left: 0, top: 0, right: 100, bottom: 100, width: 100, height: 100 } as DOMRect;
+
+    // Pointer at (100, 100) -> right of origin (0, 100) -> angle 0 deg -> 0%
+    const norm0 = calculatePointerNormalized(100, 100, mockRect, 'bottom-left');
     expect(norm0).toBe(0);
 
-    // Pointer at (0, -100) -> angle 90 deg -> 100%
-    const norm1 = calculatePointerNormalized(0, -100, 0, 0, 'bottom-left');
+    // Pointer at (0, 0) -> top of origin (0, 100) -> angle 90 deg -> 100%
+    const norm1 = calculatePointerNormalized(0, 0, mockRect, 'bottom-left');
     expect(norm1).toBe(1);
+
+    // Pointer at (50, 50) -> angle 45 deg -> 50%
+    const normMid = calculatePointerNormalized(50, 50, mockRect, 'bottom-left');
+    expect(normMid).toBeCloseTo(0.5, 1);
   });
 
   it('generates expected number of dial ticks and celestial dots', () => {

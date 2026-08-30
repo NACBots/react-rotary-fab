@@ -45,25 +45,10 @@ export function useRotaryDrag({
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
 
-      let originX = rect.left;
-      let originY = rect.bottom;
-
-      if (placement === 'bottom-right') {
-        originX = rect.right;
-        originY = rect.bottom;
-      } else if (placement === 'top-left') {
-        originX = rect.left;
-        originY = rect.top;
-      } else if (placement === 'top-right') {
-        originX = rect.right;
-        originY = rect.top;
-      }
-
       const normalized = calculatePointerNormalized(
         e.clientX,
         e.clientY,
-        originX,
-        originY,
+        rect,
         placement
       );
 
