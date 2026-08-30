@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-08-30
+
+### 🚀 Highlights & Major Features
+- 🎨 **New 3D Skeuomorphic Theme**: Added tactile physical depth, push shadows, metallic bezels, and theme-exclusive 3D button push physics.
+- 🎛 **Smooth Rotary Dial & Mobile Touch Drag Tracking**: Completely re-engineered quadrant origin trigonometry and global pointer-capture tracking with `touch-action: none` for jitter-free, ultra-smooth scrubbing on mobile touchscreens and desktop browsers.
+- 📖 **Full Dumi Documentation Site**: Integrated a luxury Dumi v2 documentation platform with interactive sandboxes, component specs, haptics guide, and theming reference.
+- 🤖 **AI Agent Integration Guide (`AGENTS.md`)**: Published authoritative instructions and schema contracts for AI coding assistants (Cursor, Claude Code, GitHub Copilot, Antigravity, ChatGPT).
+- 🪐 **Multi-Tier 2-Arc Concentric Menus**: Added live interactive dual-arc orbital menu demos and quick switcher in the Interactive Studio.
+- 🌓 **Watchmaker Logo & Adaptive Dark Mode**: Added circular horology logo with automatic dark-mode inversion in documentation and README.
+- 📳 **Enhanced Haptics Engine**: Added safe function and method chaining (`haptic.tick()`, `haptic.boundary()`, `haptic('tick')`) for Web Vibration API.
+- 🛡 **Layout & Z-Index Standard**: Confined `.rf-container` to `position: absolute; z-index: 20` to eliminate sidebar/header stacking bleeds.
+
 ## [1.0.1] - 2026-08-29
 
 ### Added & Improved
