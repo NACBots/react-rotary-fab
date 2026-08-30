@@ -1,14 +1,14 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { RotaryDialProps } from './types';
 import {
   describeArc,
   getDialAngleSpan,
-  polarToCartesian,
   getSvgViewBox,
   generateWatchDialTicks,
-  generateCelestialDots
+  generateCelestialDots,
+  polarToCartesian
 } from './utils/geometry';
-import { useRotaryDrag } from './hooks/useRotaryDrag';
+import { useHaptic } from './hooks/useHaptic';
 
 export const RotaryDial: React.FC<RotaryDialProps> = ({
   value: controlledValue,
@@ -20,6 +20,8 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
   onChangeEnd,
   radius = 124,
   placement = 'bottom-left',
+  dialStyle = 'watchmaker',
+  theme = 'luxury-watch',
   label,
   unit = '% VOL',
   showTrack = true,
@@ -57,71 +59,134 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
     onChange?.(newVal);
   };
 
-  const {
-    containerRef,
-    isDragging,
-    handlePointerDown,
-    handlePointerMove,
-    handlePointerUp,
-    handleKeyDown,
-    handleWheel
-  } = useRotaryDrag({
-    value: currentValue,
-    min,
-    max,
-    step,
-    placement,
-    enableHaptics: enableHaptics && !disabled,
-    onChange: handleValueChange,
-    onChangeEnd
-  });
-
   const span = getDialAngleSpan(placement);
-  const normalizedValue = Math.max(0, Math.min(1, (currentValue - min) / (max - min || 1)));
-
-  // SVG dimensions
-  const svgInfo = getSvgViewBox(radius, 24, placement);
-
-  // Math for stroke dash offset (drawn from zeroDeg to maxDeg)
-  const arcLength = (Math.abs(span.totalSpanDeg) * Math.PI * radius) / 180;
-  const strokeOffset = arcLength * (1 - normalizedValue);
-
-  // Thumb position and needle angle (from 0% to 100%)
-  const currentAngleDeg = span.zeroDeg + normalizedValue * (span.maxDeg - span.zeroDeg);
+  const normalized = Math.max(0, Math.min(1, (currentValue - min) / (max - min || 1)));
+  const currentAngleDeg = span.zeroDeg + normalized * (span.maxDeg - span.zeroDeg);
+  const totalAngleDiff = Math.abs(span.maxDeg - span.zeroDeg);
+  const arcLength = (Math.PI * radius * totalAngleDiff) / 180;
+  const strokeOffset = arcLength * (1 - normalized);
   const thumbPos = polarToCartesian(radius, currentAngleDeg);
+
+  const containerRef = useRef<SVGSVGElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const haptic = useHaptic(enableHaptics);
+  const prevTickRef = useRef<number>(Math.round(currentValue / (step || 1)));
+
+  // Trigger haptics on step increments
+  useEffect(() => {
+    const currentStepIndex = Math.round(currentValue / (step || 1));
+    if (currentStepIndex !== prevTickRef.current) {
+      prevTickRef.current = currentStepIndex;
+      if (currentValue === min || currentValue === max) {
+        haptic('boundary');
+      } else {
+        haptic('tick');
+      }
+    }
+  }, [currentValue, min, max, step, haptic]);
+
+  const updatePointerPosition = useCallback(
+    (clientX: number, clientY: number) => {
+      if (!containerRef.current || disabled) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const originX = rect.left;
+      const originY = rect.top;
+
+      const dx = clientX - originX;
+      const dy = clientY - originY;
+      let angleRad = Math.atan2(dy, dx);
+      let angleDeg = (angleRad * 180) / Math.PI;
+      if (angleDeg < 0) angleDeg += 360;
+
+      const dialSpan = getDialAngleSpan(placement);
+      let rawPercent = (angleDeg - dialSpan.zeroDeg) / (dialSpan.maxDeg - dialSpan.zeroDeg);
+
+      rawPercent = Math.max(0, Math.min(1, rawPercent));
+      const rawValue = min + rawPercent * (max - min);
+      const steppedValue = Math.round(rawValue / step) * step;
+      const clampedValue = Math.max(min, Math.min(max, steppedValue));
+
+      handleValueChange(Number(clampedValue.toFixed(4)));
+    },
+    [placement, min, max, step, disabled]
+  );
+
+  const handlePointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (disabled) return;
+    (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    setIsDragging(true);
+    updatePointerPosition(e.clientX, e.clientY);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (!isDragging || disabled) return;
+    updatePointerPosition(e.clientX, e.clientY);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (isDragging) {
+      setIsDragging(false);
+      try {
+        (e.currentTarget as Element).releasePointerCapture(e.pointerId);
+      } catch {}
+      onChangeEnd?.(currentValue);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (disabled) return;
+    let nextVal = currentValue;
+    if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+      nextVal = Math.min(max, currentValue + step);
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+      nextVal = Math.max(min, currentValue - step);
+    } else if (e.key === 'PageUp') {
+      nextVal = Math.min(max, currentValue + step * 5);
+    } else if (e.key === 'PageDown') {
+      nextVal = Math.max(min, currentValue - step * 5);
+    } else if (e.key === 'Home') {
+      nextVal = min;
+    } else if (e.key === 'End') {
+      nextVal = max;
+    } else {
+      return;
+    }
+    e.preventDefault();
+    handleValueChange(nextVal);
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (disabled) return;
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? step : -step;
+    const nextVal = Math.max(min, Math.min(max, currentValue + delta));
+    handleValueChange(nextVal);
+  };
+
+  const svgInfo = getSvgViewBox(radius + 24, 20, placement);
+  const ticks = generateWatchDialTicks(radius, normalized, tickCount, placement);
+  const innerDotRadius = radius - 18;
+  const dots = generateCelestialDots(innerDotRadius, normalized, dotCount, placement);
+
   const needleP1 = polarToCartesian(radius - 10, currentAngleDeg);
   const needleP2 = polarToCartesian(radius + 10, currentAngleDeg);
 
-  // Inner celestial dot orbit radius
-  const innerDotRadius = radius - 56;
-
-  const ticks = useMemo(() => {
-    if (!showTicks) return [];
-    return generateWatchDialTicks(radius, normalizedValue, tickCount, placement);
-  }, [radius, normalizedValue, tickCount, placement, showTicks]);
-
-  const dots = useMemo(() => {
-    if (!showMicroDots) return [];
-    return generateCelestialDots(innerDotRadius, normalizedValue, dotCount, placement);
-  }, [innerDotRadius, normalizedValue, dotCount, placement, showMicroDots]);
-
-  // Render Label Readout
   const renderReadout = () => {
     if (typeof label === 'function') {
       return label(currentValue);
     }
-    if (typeof label === 'string') {
-      return <span>{label}</span>;
+    if (label) {
+      return label;
     }
     return (
       <>
-        <span className="rf-chrono-val">{Math.round(currentValue)}</span>
+        <span className="rf-chrono-val">{currentValue}</span>
         {unit && <span className="rf-chrono-unit">{unit}</span>}
       </>
     );
   };
 
-  const getSvgPosition = (): React.CSSProperties => {
+  const getPlacementStyle = (): React.CSSProperties => {
     switch (placement) {
       case 'bottom-left':
         return { bottom: 0, left: 0 };
@@ -136,12 +201,26 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
     }
   };
 
+  // Dial Style Specific Adjustments
+  const isMinimal = dialStyle === 'minimal';
+  const isCyber = dialStyle === 'cyber-segmented';
+  const isHolo = dialStyle === 'holographic';
+  const isRetro = dialStyle === 'retro-analog';
+  const isNeonGlow = dialStyle === 'neon-glow';
+
+  const shouldRenderTicks = showTicks && !isMinimal;
+  const shouldRenderMicroDots = showMicroDots && !isMinimal && !isRetro;
+  const shouldRenderBezel = showBezel && !isMinimal;
+
   return (
     <div
-      className={`rf-dial-container ${isDragging ? 'rf-dial-dragging' : ''} ${
-        disabled ? 'rf-dial-disabled' : ''
-      } ${className}`}
-      style={style}
+      className={`rf-dial-container rf-placement-${placement} rf-dial-style-${dialStyle} rf-theme-${theme} ${
+        isDragging ? 'rf-dial-dragging' : ''
+      } ${disabled ? 'rf-dial-disabled' : ''} ${className}`}
+      style={{
+        ...getPlacementStyle(),
+        ...style
+      }}
       tabIndex={disabled ? -1 : 0}
       role="slider"
       aria-label={ariaLabel}
@@ -159,8 +238,6 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         viewBox={svgInfo.viewBox}
         className="rf-dial-svg"
         style={{
-          position: 'absolute',
-          ...getSvgPosition(),
           overflow: 'visible'
         }}
         onPointerDown={disabled ? undefined : handlePointerDown}
@@ -168,8 +245,24 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         onPointerUp={disabled ? undefined : handlePointerUp}
         onPointerCancel={disabled ? undefined : handlePointerUp}
       >
+        <defs>
+          {/* Holographic Prismatic Gradient */}
+          <linearGradient id="rf-holo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#38bdf8" />
+            <stop offset="33%" stopColor="#a855f7" />
+            <stop offset="66%" stopColor="#ec4899" />
+            <stop offset="100%" stopColor="#f59e0b" />
+          </linearGradient>
+
+          {/* Neon Glow Gradient */}
+          <linearGradient id="rf-neon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#06b6d4" />
+            <stop offset="100%" stopColor="#ec4899" />
+          </linearGradient>
+        </defs>
+
         {/* Inner Dotted Celestial Orbit Guideline */}
-        {showMicroDots && (
+        {shouldRenderMicroDots && (
           <path
             d={describeArc(innerDotRadius, span.zeroDeg, span.maxDeg)}
             fill="none"
@@ -180,7 +273,7 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         )}
 
         {/* Celestial Micro-Dots */}
-        {showMicroDots &&
+        {shouldRenderMicroDots &&
           dots.map(dot => (
             <circle
               key={dot.id}
@@ -199,7 +292,7 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
           ))}
 
         {/* Subtle Outer Bezel Guideline */}
-        {showBezel && (
+        {shouldRenderBezel && (
           <path
             d={describeArc(radius + 8, span.zeroDeg, span.maxDeg)}
             fill="none"
@@ -209,7 +302,7 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
         )}
 
         {/* Subtle Inner Bezel Guideline */}
-        {showBezel && (
+        {shouldRenderBezel && (
           <path
             d={describeArc(radius - 8, span.zeroDeg, span.maxDeg)}
             fill="none"
@@ -225,7 +318,8 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
             d={describeArc(radius, span.zeroDeg, span.maxDeg)}
             fill="none"
             stroke="var(--rf-track, rgba(255, 255, 255, 0.14))"
-            strokeWidth="1.5"
+            strokeWidth={isMinimal ? '1.5' : isCyber ? '3' : '1.5'}
+            strokeDasharray={isCyber ? '4 4' : undefined}
           />
         )}
 
@@ -234,18 +328,34 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
           className="rf-dial-fill"
           d={describeArc(radius, span.zeroDeg, span.maxDeg)}
           fill="none"
-          stroke="var(--rf-fill, #ffffff)"
-          strokeWidth="2"
-          strokeLinecap="round"
+          stroke={
+            isHolo
+              ? 'url(#rf-holo-grad)'
+              : isNeonGlow
+              ? 'url(#rf-neon-grad)'
+              : isRetro
+              ? '#f97316'
+              : 'var(--rf-fill, #ffffff)'
+          }
+          strokeWidth={isMinimal ? '2' : isCyber ? '3.5' : isNeonGlow ? '3' : '2'}
+          strokeLinecap={isCyber ? 'butt' : 'round'}
           style={{
-            strokeDasharray: arcLength,
-            strokeDashoffset: strokeOffset,
-            filter: showGlow ? 'drop-shadow(0 0 4px var(--rf-accent-glow, rgba(255, 255, 255, 0.6)))' : 'none'
+            strokeDasharray: isCyber ? '6 3' : `${arcLength} ${arcLength}`,
+            strokeDashoffset: isCyber ? undefined : `${strokeOffset}`,
+            filter: showGlow
+              ? isNeonGlow
+                ? 'drop-shadow(0 0 6px #06b6d4) drop-shadow(0 0 12px #ec4899)'
+                : isHolo
+                ? 'drop-shadow(0 0 5px rgba(168, 85, 247, 0.8))'
+                : isRetro
+                ? 'drop-shadow(0 0 4px rgba(249, 115, 22, 0.8))'
+                : 'drop-shadow(0 0 4px var(--rf-accent-glow, rgba(255, 255, 255, 0.6)))'
+              : 'none'
           }}
         />
 
         {/* Precision Watch Line Dial Ticks */}
-        {showTicks &&
+        {shouldRenderTicks &&
           ticks.map(tick => (
             <line
               key={tick.id}
@@ -253,8 +363,14 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
               y1={tick.y1}
               x2={tick.x2}
               y2={tick.y2}
-              stroke={tick.isActive ? 'var(--rf-fill, #ffffff)' : 'var(--rf-track, rgba(255, 255, 255, 0.22))'}
-              strokeWidth={tick.isMajor ? 2 : 1.2}
+              stroke={
+                tick.isActive
+                  ? isRetro
+                    ? '#fb923c'
+                    : 'var(--rf-fill, #ffffff)'
+                  : 'var(--rf-track, rgba(255, 255, 255, 0.22))'
+              }
+              strokeWidth={tick.isMajor ? (isCyber ? 2.5 : 2) : 1.2}
               strokeLinecap="round"
               style={{
                 transition: 'stroke 0.15s ease',
@@ -267,17 +383,21 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
           ))}
 
         {/* Precision Watch Needle Line on Thumb */}
-        {showNeedle && (
+        {showNeedle && !isMinimal && (
           <line
             x1={needleP1.x}
             y1={needleP1.y}
             x2={needleP2.x}
             y2={needleP2.y}
-            stroke="var(--rf-fill, #ffffff)"
-            strokeWidth="2.5"
+            stroke={isRetro ? '#ea580c' : isHolo ? '#c084fc' : 'var(--rf-fill, #ffffff)'}
+            strokeWidth={isRetro ? '3' : '2.5'}
             strokeLinecap="round"
             style={{
-              filter: showGlow ? 'drop-shadow(0 0 5px var(--rf-accent-glow, rgba(255, 255, 255, 0.9)))' : 'none'
+              filter: showGlow
+                ? isRetro
+                  ? 'drop-shadow(0 0 6px #ea580c)'
+                  : 'drop-shadow(0 0 5px var(--rf-accent-glow, rgba(255, 255, 255, 0.9)))'
+                : 'none'
             }}
           />
         )}
@@ -287,10 +407,19 @@ export const RotaryDial: React.FC<RotaryDialProps> = ({
           className="rf-dial-thumb"
           cx={thumbPos.x}
           cy={thumbPos.y}
-          r="4"
-          fill="var(--rf-fill, #ffffff)"
-          stroke="var(--rf-bg-main, #0d0d0e)"
-          strokeWidth="1.5"
+          r={isMinimal ? '3.5' : isCyber ? '5' : '4'}
+          fill={isHolo ? '#ec4899' : isRetro ? '#f97316' : 'var(--rf-fill, #ffffff)'}
+          stroke={isRetro ? '#431407' : 'var(--rf-bg-main, #0d0d0e)'}
+          strokeWidth={isMinimal ? '1' : '1.5'}
+          style={{
+            filter: showGlow
+              ? isHolo
+                ? 'drop-shadow(0 0 6px #ec4899)'
+                : isRetro
+                ? 'drop-shadow(0 0 6px #f97316)'
+                : 'drop-shadow(0 0 4px var(--rf-accent-glow, #ffffff))'
+              : 'none'
+          }}
         />
       </svg>
 

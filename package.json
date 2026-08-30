@@ -50,13 +50,15 @@
   },
   "homepage": "https://rotary-fab.nacbots.com",
   "scripts": {
-    "dev": "npm --prefix demo run dev",
+    "dev": "dumi dev",
+    "docs:dev": "dumi dev",
+    "docs:build": "dumi build",
     "build": "tsup",
-    "build:demo": "npm --prefix demo run build",
+    "build:demo": "dumi build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "clean": "rimraf dist demo/dist",
+    "clean": "rimraf dist docs-dist demo/dist",
     "prepublishOnly": "npm run typecheck && npm run test && npm run build"
   },
   "peerDependencies": {
@@ -70,6 +72,7 @@
     "@types/node": "^22.13.5",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "dumi": "^2.4.49",
     "jsdom": "^26.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

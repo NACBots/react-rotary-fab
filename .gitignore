@@ -6,7 +6,10 @@ node_modules/
 # Build Outputs
 dist/
 build/
+docs-dist/
 demo/dist/
+.dumi/tmp/
+.dumi/tmp-*
 
 # Logs
 npm-debug.log*

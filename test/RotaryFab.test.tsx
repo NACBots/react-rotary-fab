@@ -80,4 +80,23 @@ describe('RotaryFab Component', () => {
     rerender(<RotaryFab items={mockItems} defaultOpen={true} showOrbitLines={false} />);
     expect(container.querySelector('.rf-orbit-tracks-svg')).not.toBeInTheDocument();
   });
+
+  it('renders 3D theme and switches to dial mode', () => {
+    const { container, rerender } = render(
+      <RotaryFab items={mockItems} theme="3d" dialMode={false} />
+    );
+    const root = container.firstChild as HTMLElement;
+    expect(root.className).toContain('rf-theme-3d');
+
+    rerender(
+      <RotaryFab
+        items={mockItems}
+        theme="3d"
+        dialMode={true}
+        dialProps={{ dialStyle: 'watchmaker', value: 75 }}
+      />
+    );
+    expect(screen.getByRole('slider')).toBeInTheDocument();
+    expect(screen.getByText('75')).toBeInTheDocument();
+  });
 });

@@ -40,4 +40,12 @@ describe('RotaryDial Component', () => {
     render(<RotaryDial value={42} label={val => `Custom: ${val} units`} />);
     expect(screen.getByText('Custom: 42 units')).toBeInTheDocument();
   });
+
+  it('renders with watchmaker default dial style and custom styles', () => {
+    const { container, rerender } = render(<RotaryDial value={60} dialStyle="watchmaker" />);
+    expect(container.querySelector('.rf-dial-style-watchmaker')).toBeInTheDocument();
+
+    rerender(<RotaryDial value={60} dialStyle="minimal" />);
+    expect(container.querySelector('.rf-dial-style-minimal')).toBeInTheDocument();
+  });
 });

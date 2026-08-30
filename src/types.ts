@@ -20,6 +20,7 @@ export type FabPlacement =
  */
 export type FabTheme =
   | 'luxury-watch'
+  | '3d'
   | 'glassmorphic'
   | 'cyberpunk'
   | 'minimal-light'
@@ -38,6 +39,36 @@ export type AnimationMode =
   | 'fade'
   | 'elastic'
   | 'none';
+
+/**
+ * Ambient corner glow lighting styles.
+ */
+export type GlowType =
+  | 'radial'
+  | 'aurora'
+  | 'neon'
+  | 'none';
+
+/**
+ * Precision rotary arc slider visual styles.
+ */
+export type DialStyle =
+  | 'watchmaker'
+  | 'minimal'
+  | 'cyber-segmented'
+  | 'neon-glow'
+  | 'retro-analog'
+  | 'holographic';
+
+/**
+ * Visual variant / 3D styling for the main Floating Action Button.
+ */
+export type FabButtonVariant =
+  | '3d'
+  | 'glass'
+  | 'flat'
+  | 'neon'
+  | 'luxury-chronograph';
 
 /**
  * Safe tactile vibration haptic feedback patterns.
@@ -181,6 +212,10 @@ export interface RotaryDialProps {
   showGlow?: boolean;
   /** Enable tactile haptics on dial tick steps (default: true) */
   enableHaptics?: boolean;
+  /** Precision rotary dial visual style (default: 'watchmaker') */
+  dialStyle?: DialStyle;
+  /** Theme name or custom theme */
+  theme?: FabTheme;
   /** Custom CSS class name */
   className?: string;
   /** Custom inline style */
@@ -209,6 +244,8 @@ export interface RotaryFabProps {
   theme?: FabTheme;
   /** Animation entrance & exit mode (default: 'spring') */
   animationMode?: AnimationMode;
+  /** Visual variant styling for the main FAB button (default: '3d') */
+  mainButtonVariant?: FabButtonVariant;
   /** Custom theme CSS variable overrides */
   customTheme?: Record<string, string>;
   /** Concentric arc configurations */
@@ -251,6 +288,12 @@ export interface RotaryFabProps {
   showOrbitLines?: boolean;
   /** Show subtle ambient corner gradient background (default: true) */
   showCornerBackdrop?: boolean;
+  /** Show ambient corner glow (alias for showCornerBackdrop, default: true) */
+  showGlow?: boolean;
+  /** Ambient corner glow style (default: 'radial') */
+  glowType?: GlowType;
+  /** Custom ambient glow color override (e.g. 'rgba(56, 189, 248, 0.4)' or '#38bdf8') */
+  glowColor?: string;
   /** Custom item renderer override */
   renderItem?: (item: RotaryFabItem, index: number, tierIndex: number) => React.ReactNode;
   /** Custom root className */

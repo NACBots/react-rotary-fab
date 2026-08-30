@@ -18,6 +18,7 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
   placement = 'bottom-left',
   theme = 'luxury-watch',
   animationMode = 'spring',
+  mainButtonVariant,
   customTheme,
   arcConfigs: customArcConfigs,
   mainButton,
@@ -38,6 +39,9 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
   enableHaptics = true,
   showOrbitLines = true,
   showCornerBackdrop = true,
+  showGlow,
+  glowType = 'radial',
+  glowColor,
   renderItem,
   className = '',
   style,
@@ -180,7 +184,7 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
   return (
     <div
       ref={anchorRef}
-      className={`rf-container ${placementClass} rf-anim-${animationMode} ${isOpen ? 'rf-open' : ''} ${
+      className={`rf-container ${placementClass} rf-theme-${theme} rf-anim-${animationMode} ${isOpen ? 'rf-open' : ''} ${
         isDialMode ? 'rf-dial-mode' : ''
       } ${className}`}
       style={{
@@ -190,7 +194,13 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
       } as React.CSSProperties}
     >
       {/* Corner Ambient Backdrop */}
-      {showCornerBackdrop && <div className="rf-backdrop" aria-hidden="true" />}
+      {(showGlow !== undefined ? showGlow : showCornerBackdrop) && glowType !== 'none' && (
+        <div
+          className={`rf-backdrop rf-glow-${glowType}`}
+          style={glowColor ? ({ '--rf-glow-color': glowColor } as React.CSSProperties) : undefined}
+          aria-hidden="true"
+        />
+      )}
 
       {/* Concentric Action Menu Wheel */}
       <div className="rf-wheel" aria-hidden={!isOpen}>
@@ -246,6 +256,7 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
         <div className="rf-dial-wrapper">
           <RotaryDial
             placement={placement}
+            theme={theme}
             enableHaptics={enableHaptics}
             {...dialProps}
           />
@@ -255,9 +266,9 @@ export const RotaryFab: React.FC<RotaryFabProps> = ({
       {/* Primary Floating Action Button (FAB) */}
       <button
         type="button"
-        className={`rf-main-btn ${isOpen ? 'rf-main-open' : ''} ${
-          isDialMode ? 'rf-main-dial' : ''
-        } ${mainButtonClassName}`}
+        className={`rf-main-btn ${mainButtonVariant ? `rf-btn-${mainButtonVariant}` : ''} ${
+          isOpen ? 'rf-main-open' : ''
+        } ${isDialMode ? 'rf-main-dial' : ''} ${mainButtonClassName}`}
         style={{
           width: `${mainButtonSize}px`,
           height: `${mainButtonSize}px`,

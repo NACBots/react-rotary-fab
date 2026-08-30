@@ -1,38 +1,34 @@
 <p align="center">
-  <img src="assets/banner.png" alt="react-rotary-fab banner" width="100%" style="border-radius: 12px;" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.png">
+    <img src="assets/logo.png" alt="react-rotary-fab logo" width="180px" style="border-radius: 50%; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" />
+  </picture>
 </p>
 
-# react-rotary-fab ⏱✨
-
-[![npm version](https://img.shields.io/npm/v/react-rotary-fab.svg?color=38bdf8)](https://www.npmjs.com/package/react-rotary-fab)
-[![Live Demo](https://img.shields.io/badge/Demo-rotary--fab.nacbots.com-38bdf8?logo=vercel)](https://rotary-fab.nacbots.com)
-[![license](https://img.shields.io/npm/l/react-rotary-fab.svg?color=10b981)](https://github.com/nikhileashy/react-rotary-fab/blob/main/LICENSE)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/react-rotary-fab?color=8b5cf6)](https://bundlephobia.com/package/react-rotary-fab)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
-
-> A luxury watchmaker-inspired, highly customizable concentric rotary **Floating Action Button (FAB)** and precision **Rotary Arc Dial / Slider** for React.
-
----
-
-## 🎬 Preview
+<h1 align="center">react-rotary-fab ⏱✨</h1>
 
 <p align="center">
-  <img src="assets/demo.gif" alt="react-rotary-fab interactive demo" width="100%" style="border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.6);" />
+  <b>A luxury watchmaker-inspired, highly customizable concentric rotary Floating Action Button (FAB) and precision Rotary Arc Dial / Slider for React.</b>
 </p>
 
 <p align="center">
-  <a href="https://rotary-fab.nacbots.com"><b>⚡ Explore the Live Interactive Studio Demo &rarr;</b></a>
+  <a href="https://www.npmjs.com/package/react-rotary-fab"><img src="https://img.shields.io/npm/v/react-rotary-fab.svg?color=38bdf8" alt="npm version" /></a>
+  <a href="https://rotary-fab.nacbots.com"><img src="https://img.shields.io/badge/Docs%20%26%20Demo-rotary--fab.nacbots.com-38bdf8?logo=vercel" alt="Documentation & Demo" /></a>
+  <a href="https://github.com/nikhileashy/react-rotary-fab/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/react-rotary-fab.svg?color=10b981" alt="license" /></a>
+  <a href="https://bundlephobia.com/package/react-rotary-fab"><img src="https://img.shields.io/bundlephobia/minzip/react-rotary-fab?color=8b5cf6" alt="bundle size" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-Ready-blue.svg" alt="TypeScript" /></a>
 </p>
 
 ---
 
 ## 🌟 Highlights
 
-- ⏱ **Concentric Multi-Tier Orbital Arcs**: Distribute 4, 10, or 20+ action items across balanced concentric arc tiers with smooth staggered entrance physics.
-- 🧭 **4-Corner & Edge Quadrant Math**: Automatic trigonometric coordinate mapping for `bottom-left`, `bottom-right`, `top-left`, `top-right`, `bottom-center`, `top-center`, and `center`.
-- 🎛 **Precision Watchmaker Rotary Dial / Slider**: Integrated or standalone rotary arc scrubber with celestial micro-dots, precision tick marks, luminous jewel thumb knob, and needle indicator.
+- ⏱ **Concentric Multi-Tier Orbital Arcs**: Distribute 4, 9, or 20+ action items across balanced concentric arc tiers with smooth staggered entrance physics.
+- 🧭 **4-Corner & Edge Quadrant Math**: Automatic trigonometric coordinate mapping for `bottom-left`, `bottom-right`, `top-left`, and `top-right`.
+- 🎛 **6 Precision Dial Design Styles**: `watchmaker` (classic horology), `minimal`, `cyber-segmented`, `neon-glow`, `retro-analog`, and `holographic`.
+- 🎨 **6 Built-in Themes**: `luxury-watch` (OLED obsidian & jewels), `3d` (tactile skeuomorphic push), `glassmorphic` (frosted crystal), `cyberpunk` (laser HUD), `minimal-light` (porcelain), and `neon` (ultra-violet).
 - 📳 **Tactile Haptic Feedback Engine**: Safe Web Vibration API engine with realistic tactile patterns (`tick`, `light`, `medium`, `boundary`, `danger`, `toggle`).
-- 🎨 **5 Built-in Luxury Themes**: `luxury-watch` (OLED obsidian & jewels), `glassmorphic` (frosted blur), `cyberpunk` (neon cyan & yellow), `minimal-light` (porcelain), and `neon` (ultra-violet).
+- 🌌 **Studio Corner Ambient Backlighting**: High-end radial, aurora, and neon corner ambient glow modes.
 - 💅 **Full CSS Variable Customization**: Customize colors, glows, blur, backdrop, and sizes with CSS variables or Tailwind.
 - 🛡 **Zero Heavy UI Dependencies**: Completely standalone — includes built-in accessible tooltips, badge counts, and notifications with zero bundle bloat.
 - ♿ **Full Accessibility**: Keyboard arrow controls (`ArrowUp/Down/Left/Right`, `PageUp/Down`, `Home/End`), mouse wheel support, and WCAG-compliant ARIA attributes.

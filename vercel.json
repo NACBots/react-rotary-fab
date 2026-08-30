@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install && (cd demo && npm install)",
-  "buildCommand": "npm --prefix demo run build",
-  "outputDirectory": "demo/dist",
-  "framework": "vite"
+  "installCommand": "npm install",
+  "buildCommand": "npm run docs:build",
+  "outputDirectory": "docs-dist"
 }

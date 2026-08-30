@@ -34,6 +34,9 @@ export type {
   FabPlacement,
   FabTheme,
   AnimationMode,
+  GlowType,
+  DialStyle,
+  FabButtonVariant,
   HapticType,
   RotaryFabItem,
   ArcTierConfig,
@@ -46,4 +49,5 @@ export type { ThemeConfig } from './utils/themes';
 export type { RotaryItemProps } from './RotaryItem';
 export type { OrbitTracksProps } from './OrbitTracks';
 export type { UseRotaryDragOptions } from './hooks/useRotaryDrag';
+export type { UseHapticReturn } from './hooks/useHaptic';
 export type { IconProps } from './icons';

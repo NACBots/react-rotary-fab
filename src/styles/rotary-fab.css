@@ -29,16 +29,21 @@
    ========================================================================== */
 
 .rf-container {
-  position: fixed;
+  position: absolute;
   width: var(--rf-main-size, 52px);
   height: var(--rf-main-size, 52px);
-  z-index: 9999;
+  z-index: 20;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   pointer-events: none;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   color: var(--rf-text);
+}
+
+.rf-container.rf-fixed {
+  position: fixed;
+  z-index: 999;
 }
 
 .rf-container * {
@@ -96,17 +101,17 @@
 }
 
 /* ==========================================================================
-   Ambient Corner Backdrop
+   Ambient Corner Backdrop & Professional Studio Lighting
    ========================================================================== */
 
 .rf-backdrop {
   position: absolute;
-  width: 380px;
-  height: 380px;
+  width: 420px;
+  height: 420px;
   pointer-events: none;
   opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 0.4s ease, transform 0.4s var(--rf-transition-timing);
+  transform: scale(0.9);
+  transition: opacity 0.45s var(--rf-transition-timing), transform 0.45s var(--rf-transition-timing);
   z-index: 0;
 }
 
@@ -119,19 +124,51 @@
 .rf-placement-bottom-right .rf-backdrop {
   bottom: -40px;
   right: -40px;
-  background: radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 70%);
+  background: radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0) 72%);
 }
 
 .rf-placement-top-left .rf-backdrop {
   top: -40px;
   left: -40px;
-  background: radial-gradient(circle at top left, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 70%);
+  background: radial-gradient(circle at top left, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0) 72%);
 }
 
 .rf-placement-top-right .rf-backdrop {
   top: -40px;
   right: -40px;
-  background: radial-gradient(circle at top right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 70%);
+  background: radial-gradient(circle at top right, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0) 72%);
+}
+
+/* 1. Professional Aurora Subtle Studio Lighting */
+.rf-glow-aurora {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.rf-placement-bottom-left .rf-glow-aurora {
+  background: radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.16) 0%, rgba(168, 85, 247, 0.08) 35%, rgba(0, 0, 0, 0.6) 60%, transparent 78%) !important;
+}
+.rf-placement-bottom-right .rf-glow-aurora {
+  background: radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.16) 0%, rgba(168, 85, 247, 0.08) 35%, rgba(0, 0, 0, 0.6) 60%, transparent 78%) !important;
+}
+.rf-placement-top-left .rf-glow-aurora {
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.16) 0%, rgba(168, 85, 247, 0.08) 35%, rgba(0, 0, 0, 0.6) 60%, transparent 78%) !important;
+}
+.rf-placement-top-right .rf-glow-aurora {
+  background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.16) 0%, rgba(168, 85, 247, 0.08) 35%, rgba(0, 0, 0, 0.6) 60%, transparent 78%) !important;
+}
+
+/* 2. Professional Neon Studio Glow */
+.rf-placement-bottom-left .rf-glow-neon {
+  background: radial-gradient(circle at bottom left, rgba(6, 182, 212, 0.25) 0%, rgba(236, 72, 153, 0.1) 40%, rgba(0, 0, 0, 0.65) 65%, transparent 80%) !important;
+}
+.rf-placement-bottom-right .rf-glow-neon {
+  background: radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.25) 0%, rgba(236, 72, 153, 0.1) 40%, rgba(0, 0, 0, 0.65) 65%, transparent 80%) !important;
+}
+.rf-placement-top-left .rf-glow-neon {
+  background: radial-gradient(circle at top left, rgba(6, 182, 212, 0.25) 0%, rgba(236, 72, 153, 0.1) 40%, rgba(0, 0, 0, 0.65) 65%, transparent 80%) !important;
+}
+.rf-placement-top-right .rf-glow-neon {
+  background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.25) 0%, rgba(236, 72, 153, 0.1) 40%, rgba(0, 0, 0, 0.65) 65%, transparent 80%) !important;
 }
 
 .rf-open .rf-backdrop,
@@ -141,7 +178,7 @@
 }
 
 /* ==========================================================================
-   Primary Floating Action Button (Main FAB)
+   Primary Floating Action Button (Main FAB) & 3D Variants
    ========================================================================== */
 
 .rf-main-btn {
@@ -178,6 +215,92 @@
 
 .rf-main-btn:focus-visible {
   box-shadow: var(--rf-shadow), 0 0 0 3px var(--rf-accent-glow);
+}
+
+/* 1. 3D Tactile Push-Button (Default & Premium) */
+.rf-btn-3d {
+  background: radial-gradient(circle at 35% 30%, #3a3d46 0%, #1e2026 55%, #0d0e11 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 
+    0 12px 28px -4px rgba(0, 0, 0, 0.85),
+    0 6px 14px rgba(0, 0, 0, 0.7),
+    inset 0 2.5px 3px rgba(255, 255, 255, 0.5),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(0, 0, 0, 0.6) !important;
+  transform: translateZ(0);
+}
+
+.rf-btn-3d:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 
+    0 16px 36px -4px rgba(0, 0, 0, 0.9),
+    0 8px 18px rgba(0, 0, 0, 0.8),
+    inset 0 3px 4px rgba(255, 255, 255, 0.65),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.85),
+    0 0 18px var(--rf-accent-glow) !important;
+}
+
+.rf-btn-3d:active {
+  transform: translateY(2px) scale(0.95) !important;
+  box-shadow: 
+    0 4px 10px rgba(0, 0, 0, 0.8),
+    inset 0 3.5px 7px rgba(0, 0, 0, 0.95),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Full 3D Skeuomorphic Theme */
+.rf-theme-3d .rf-main-btn,
+.rf-theme-3d .rf-item {
+  background: radial-gradient(circle at 35% 30%, #3a3d46 0%, #1e2026 55%, #0d0e11 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 
+    0 10px 24px -4px rgba(0, 0, 0, 0.85),
+    0 5px 12px rgba(0, 0, 0, 0.7),
+    inset 0 2px 3px rgba(255, 255, 255, 0.45),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(0, 0, 0, 0.6) !important;
+}
+
+.rf-theme-3d .rf-main-btn:hover,
+.rf-theme-3d .rf-item:hover {
+  transform: translateY(-2px) scale(1.08) !important;
+  box-shadow: 
+    0 14px 30px -4px rgba(0, 0, 0, 0.9),
+    0 7px 16px rgba(0, 0, 0, 0.8),
+    inset 0 2.5px 3.5px rgba(255, 255, 255, 0.6),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.85),
+    0 0 16px var(--rf-accent-glow) !important;
+}
+
+.rf-theme-3d .rf-main-btn:active,
+.rf-theme-3d .rf-item:active {
+  transform: translateY(2px) scale(0.95) !important;
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.8),
+    inset 0 3px 6px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* 2. Glassmorphic Frosted Variant */
+.rf-btn-glass {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 3. Neon Radiant Variant */
+.rf-btn-neon {
+  background: #090b10 !important;
+  border: 1.5px solid var(--rf-accent, #38bdf8) !important;
+  box-shadow: 0 0 20px var(--rf-accent-glow, rgba(56, 189, 248, 0.6)), inset 0 0 12px var(--rf-accent-glow, rgba(56, 189, 248, 0.3)) !important;
+}
+
+/* 4. Minimal Flat Variant */
+.rf-btn-flat {
+  background: #18181b !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
 .rf-main-btn-inner {
@@ -484,9 +607,59 @@
 }
 
 .rf-dial-container {
-  position: relative;
+  position: absolute;
   outline: none;
   cursor: grab;
+}
+
+/* Standalone corner placements */
+.rf-dial-container.rf-placement-bottom-left {
+  bottom: 28px;
+  left: 28px;
+}
+
+.rf-dial-container.rf-placement-bottom-right {
+  bottom: 28px;
+  right: 28px;
+}
+
+.rf-dial-container.rf-placement-top-left {
+  top: 28px;
+  left: 28px;
+}
+
+.rf-dial-container.rf-placement-top-right {
+  top: 28px;
+  right: 28px;
+}
+
+/* Embedded inside RotaryFab FAB center origin */
+.rf-placement-bottom-left .rf-dial-wrapper .rf-dial-container {
+  bottom: 0 !important;
+  left: 0 !important;
+  top: auto !important;
+  right: auto !important;
+}
+
+.rf-placement-bottom-right .rf-dial-wrapper .rf-dial-container {
+  bottom: 0 !important;
+  right: 0 !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+.rf-placement-top-left .rf-dial-wrapper .rf-dial-container {
+  top: 0 !important;
+  left: 0 !important;
+  bottom: auto !important;
+  right: auto !important;
+}
+
+.rf-placement-top-right .rf-dial-wrapper .rf-dial-container {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: auto !important;
 }
 
 .rf-dial-container:active,
@@ -547,6 +720,54 @@
   font-weight: 600;
   color: var(--rf-text-muted);
   letter-spacing: 0.5px;
+}
+
+/* Dial Style Specific Badges */
+.rf-dial-style-minimal .rf-chrono-badge {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 999px !important;
+  padding: 3px 8px !important;
+}
+
+.rf-dial-style-cyber-segmented .rf-chrono-badge {
+  background: rgba(8, 14, 26, 0.9) !important;
+  border: 1px solid #06b6d4 !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4), inset 0 0 8px rgba(6, 182, 212, 0.2) !important;
+  font-family: monospace !important;
+  border-radius: 4px !important;
+}
+.rf-dial-style-cyber-segmented .rf-chrono-val {
+  color: #06b6d4 !important;
+}
+
+.rf-dial-style-retro-analog .rf-chrono-badge {
+  background: #1c0f0a !important;
+  border: 1px solid #f97316 !important;
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.4) !important;
+}
+.rf-dial-style-retro-analog .rf-chrono-val {
+  color: #fb923c !important;
+}
+
+.rf-dial-style-holographic .rf-chrono-badge {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(168, 85, 247, 0.5) !important;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.4), 0 0 10px rgba(236, 72, 153, 0.3) !important;
+}
+.rf-dial-style-holographic .rf-chrono-val {
+  background: linear-gradient(135deg, #38bdf8, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rf-dial-style-neon-glow .rf-chrono-badge {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid #ec4899 !important;
+  box-shadow: 0 0 14px rgba(236, 72, 153, 0.5), inset 0 0 8px rgba(6, 182, 212, 0.3) !important;
+}
+.rf-dial-style-neon-glow .rf-chrono-val {
+  color: #ec4899 !important;
 }
 
 /* ==========================================================================

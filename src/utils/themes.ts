@@ -40,6 +40,25 @@ export const THEMES: Record<string, ThemeConfig> = {
     '--rf-tooltip-bg': '#0f1013',
     '--rf-tooltip-text': '#ffffff'
   },
+  '3d': {
+    '--rf-bg-main': 'radial-gradient(circle at 35% 30%, #3a3d46 0%, #1e2026 55%, #0d0e11 100%)',
+    '--rf-bg-item': 'radial-gradient(circle at 35% 30%, #2f323a 0%, #18191e 70%)',
+    '--rf-bg-item-hover': 'radial-gradient(circle at 35% 30%, #474b57 0%, #22242b 70%)',
+    '--rf-bg-item-active': '#ffffff',
+    '--rf-border': 'rgba(255, 255, 255, 0.32)',
+    '--rf-text': '#ffffff',
+    '--rf-text-muted': 'rgba(255, 255, 255, 0.65)',
+    '--rf-accent': '#38bdf8',
+    '--rf-accent-glow': 'rgba(56, 189, 248, 0.8)',
+    '--rf-danger': '#ef4444',
+    '--rf-danger-glow': 'rgba(239, 68, 68, 0.75)',
+    '--rf-track': 'rgba(255, 255, 255, 0.2)',
+    '--rf-fill': '#38bdf8',
+    '--rf-backdrop': 'radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.25) 0%, rgba(0, 0, 0, 0.8) 70%)',
+    '--rf-shadow': '0 14px 35px rgba(0, 0, 0, 0.85)',
+    '--rf-tooltip-bg': '#121317',
+    '--rf-tooltip-text': '#ffffff'
+  },
   'glassmorphic': {
     '--rf-bg-main': 'rgba(255, 255, 255, 0.12)',
     '--rf-bg-item': 'rgba(255, 255, 255, 0.15)',
